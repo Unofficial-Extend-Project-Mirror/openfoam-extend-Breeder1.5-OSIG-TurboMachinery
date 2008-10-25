@@ -1,0 +1,10 @@
+finiteVolume = ./finiteVolume
+
+fvPatchFields = $(finiteVolume)/fields/fvPatchFields
+derivedFvPatchFields = $(fvPatchFields)/derived
+
+$(derivedFvPatchFields)/profile1DfixedValue/profile1DfixedValueFvPatchFields.C
+$(derivedFvPatchFields)/profile1DfixedValue/profile1DRawData.C
+
+LIB = $(FOAM_USER_LIBBIN)/libOpenFoamTurbo
+
