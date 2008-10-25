@@ -1,0 +1,29 @@
+Description
+===========
+This part of the repository is for the TurboMachinery Special Interest Group.
+
+For more information about the TurboMachinery SIG, please visit
+http://openfoamwiki.net/index.php/Sig_Turbomachinery
+
+ 
+Structure
+=========
+The folder "ercoftacConicalDiffuser" contains a list of case studies based on
+the ERCOFTAC Conical Diffuser.
+
+The folder "applications" contains new applications.
+
+The folder "src" contains new libraries.
+
+The folder "tutorials" contains small tutorials for the new applications.
+
+Maintainers
+===========
+Hakan Nilsson,   Chalmers University of Technology
+Maryse Page,     Hydro-Quebec Research Institute
+Martin Beaudoin, Hydro-Quebec Research Institute
+
+Policy for Contributions
+========================
+Read the Contributors-Guide and apply for write access to the repository.
+Add your contributions in a directory that fits (if unsure: ask)
