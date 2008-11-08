@@ -76,12 +76,12 @@ int main(int argc, char *argv[])
 	
 	argList::noParallel();
 	
-	argList::validOptions.insert("rho", "Volumic_density. Default value: 1.0");
+	argList::validOptions.insert("rho", "value");
 	argList::validOptions.insert("allowuserdefinedfields", "");
 #if defined EXPORT_CYCLIC_BOUNDARIES	
 	argList::validOptions.insert("exportcyclics", "");
 #endif	
-	argList::validOptions.insert("help", "");
+        //	argList::validOptions.insert("help", "");
 #if 0	
 	const word fieldTypes[] =
 	{
