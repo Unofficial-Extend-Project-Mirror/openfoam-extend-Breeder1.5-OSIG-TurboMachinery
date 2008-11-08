@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     Foam::argList::validOptions.insert("debug", "");
     Foam::argList::validOptions.insert("mapUnknown", "");
 
-    Foam::argList::validOptions.insert("help", "");
+    //Foam::argList::validOptions.insert("help", "");
 
     Foam::argList args(argc, argv);
 
