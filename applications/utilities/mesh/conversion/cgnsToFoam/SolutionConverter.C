@@ -72,8 +72,8 @@ void SolutionConverter::buildAndWriteFoamFields
     const CGNSOO::Base_t&     base, 
     Foam::scalar              rho, 
     const Foam::Time&         time,
-    bool                      mapUnknown,
-    bool                      dryRun
+    bool                      dryRun,
+    bool                      mapUnknown
 )
 {
     FoamQuantities fq;

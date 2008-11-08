@@ -119,24 +119,23 @@ int main(int argc, char *argv[])
 {
     Foam::argList::noParallel();
     Foam::argList::validArgs.append("CGNS file");
-    Foam::argList::validOptions.insert("zone", "zoneList");
     Foam::argList::validOptions.insert("dryrun", "");
-    Foam::argList::validOptions.insert("novalidationMesh", "");
+    Foam::argList::validOptions.insert("noMeshValidation", "");
     Foam::argList::validOptions.insert("saveSolutions", "");
     Foam::argList::validOptions.insert("separatePatches", "");
     Foam::argList::validOptions.insert("cfxCompatibility", "");    
     Foam::argList::validOptions.insert("use2DElementsAsPatches", "");
-    Foam::argList::validOptions.insert("matchCyclicBC", "bc1:bc2");
-    Foam::argList::validOptions.insert("cyclicRotX", "angle_nn_degree");
-    Foam::argList::validOptions.insert("cyclicRotY", "angle_in_degree");
-    Foam::argList::validOptions.insert("cyclicRotZ", "angle_in_degree");
-    Foam::argList::validOptions.insert("mergeTolerance", "tolerance for matching identical nodes: fraction of smallest edge. Default value=0.1");
-    Foam::argList::validOptions.insert("cyclicMatchFaceTolFactor", "tolerance for matching cyclic faces: fraction of the smallest edge. Default value= 0.1");
-    Foam::argList::validOptions.insert("rho", "Volumic_density. Default value=1.0");
+    Foam::argList::validOptions.insert("matchCyclicBC", "bc1_name:bc2_name");
+    Foam::argList::validOptions.insert("cyclicRotX", "value");
+    Foam::argList::validOptions.insert("cyclicRotY", "value");
+    Foam::argList::validOptions.insert("cyclicRotZ", "value");
+    Foam::argList::validOptions.insert("mergeTolerance", "value");
+    Foam::argList::validOptions.insert("cyclicMatchFaceTolFactor", "value");
+    Foam::argList::validOptions.insert("rho", "value");
     Foam::argList::validOptions.insert("debug", "");
-    Foam::argList::validOptions.insert("mapUnknown", "");
-
-    //Foam::argList::validOptions.insert("help", "");
+#if DEFINED_MAP_UNKNOWN  // Work in progress
+    Foam::argList::validOptions.insert("mapUnknown", ""); // Disabled for now. Work in progress.
+#endif
 
     Foam::argList args(argc, argv);
 
@@ -171,10 +170,12 @@ int main(int argc, char *argv[])
     }
     
     bool mapUnknown = false;
+#if DEFINED_MAP_UNKNOWN  // Work in progress
     if ( args.options().found("mapUnknown") )
     {
     	mapUnknown = true;
     }
+#endif
     
     bool dryRun = false;
     if (args.options().found("dryrun"))
@@ -546,7 +547,7 @@ int main(int argc, char *argv[])
     if (args.options().found("noMeshValidation"))
     {
         if ( debug )
-            Foam::Info << "Option -noMeshValidation used: mesh will not be validated" << Foam::endl;
+            Foam::Info << "Option -noMeshValidation activated: disabling the mesh validation with checkMesh" << Foam::endl;
     }
     else
     {
@@ -573,7 +574,7 @@ int main(int argc, char *argv[])
             ? new CGNSQuantityConverter_CFXcompatibility()
             : new CGNSQuantityConverter();
 	SolutionConverter solConverter( *pShapeMesh, base, *qConverter );
-	solConverter.buildAndWriteFoamFields( mapper, base, rho, runTime, mapUnknown, dryRun );
+	solConverter.buildAndWriteFoamFields( mapper, base, rho, runTime, dryRun, mapUnknown);
 	delete qConverter;
     }
     
