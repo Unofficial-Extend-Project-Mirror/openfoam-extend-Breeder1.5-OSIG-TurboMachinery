@@ -2,13 +2,13 @@ Do automatic post-processing by doing the following:
 (this example uses time step 1000. To use another time step
 modify the -time for sample, and modify in compareAll.gplt)
 
-sample -case ../Case1.2 -time 1000
+sample -case .. -time 1000
 gnuplot compareAll.gplt
 mozilla file://$PWD/compareAll.html
 
 To plot the residuals do the following:
 (This example assumes that you have a log file in your case directory)
-foamLog ../.. Case1.2 ../log
+foamLog ../log
 gnuplot plotResiduals.gplt
 mozilla file://$PWD/residuals.png
 

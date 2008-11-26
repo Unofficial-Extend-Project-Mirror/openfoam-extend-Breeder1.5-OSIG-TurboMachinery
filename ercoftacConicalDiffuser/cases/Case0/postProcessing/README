@@ -2,7 +2,7 @@ Do automatic post-processing by doing the following:
 (this example uses time step 500. To use another time step
 modify the -time for sample, and modify in compareAll.gplt)
 
-sample -case ../Case0 -time 500
+sample -case .. -time 500
 gnuplot compareAll.gplt
 mozilla file://$PWD/compareAll.html
 
