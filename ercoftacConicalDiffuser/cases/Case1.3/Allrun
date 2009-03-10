@@ -1,0 +1,35 @@
+#!/bin/bash
+# 
+#set -x
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+#We stop this script when we encounter a problem
+trap "exit -1" ERR
+
+export caseName=`basename $PWD`
+
+echo "$caseName: Creating the file blockMeshDict using m4"
+pushd constant/polyMesh/ >& /dev/null
+m4 -P blockMeshDict.m4 > blockMeshDict
+popd
+
+echo "$caseName: Running blockMesh"
+runApplication blockMesh
+
+echo "$caseName: Creating the starting time directory"
+cp -r 0_orig 0
+
+echo "$caseName: Running addSwirlAndRotation"
+runApplication addSwirlAndRotation
+
+echo "$caseName: Running MRFSimpleFoam"
+runApplication simpleFoam
+
+echo "$caseName: Postprocessing"
+cd postProcessing
+runApplication foamCalc components U -case .. -time 2000
+runApplication sample -case .. -time 2000
+runApplication gnuplot compareAll.gplt; mv log.gnuplot log.gnuplotCompareAll
+runApplication foamLog ../log.simpleFoam 
+runApplication gnuplot plotResiduals.gplt; mv log.gnuplot log.gnuplotPlotResiduals
