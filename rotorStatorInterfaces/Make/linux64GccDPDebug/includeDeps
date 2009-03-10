@@ -1,0 +1,14 @@
+include $(primitiveRotationalPatch)/primitiveRotationalPatch.dep
+include $(primitiveMixingPlanePatch)/primitiveMixingPlanePatch.dep
+include $(fvPatch)/mixingPlaneFvPatch.dep
+include $(fvPatchField)/mixingPlaneFvPatchFields.dep
+include $(polyPatch)/mixingPlanePolyPatch.dep
+include $(pointPatch)/mixingPlanePointPatch.dep
+include $(domainScalingPolyPatch)/domainScalingPolyPatch.dep
+include $(domainScalingPointPatch)/domainScalingPointPatch.dep
+include $(domainScalingLduInteface)/domainScalingLduInterface.dep
+include $(domainScalingLduInteface)/domainScalingLduInterfaceField.dep
+include $(domainScalingfvsPatchFields)/domainScalingFvsPatchFields.dep
+include $(domainScalingfvPatch)/domainScalingFvPatch.dep
+include $(domainScalingfvPatchField)/domainScalingFvPatchFields.dep
+include $(primitiveDomainScalingPatch)/primitiveDomainScalingPatch.dep

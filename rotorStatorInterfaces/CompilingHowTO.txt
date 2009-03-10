@@ -1,0 +1,19 @@
+To compile the rotorStatorInterfaces library one has to use either the 
+1.4.1-dev or the 1.4.1 with linking additionally the GGIInterpolation files 
+from the development version.
+
+Compiling with 1.4.1
+the following folder has to be copied into the rotorStatorInterfaces directory
+./src/OpenFOAM/interpolations/GGIInterpolation/
+
+into the Make/files the following entry must be added :
+GGIInterpolation = GGIInterpolation
+$(GGIInterpolation)/GGIInterpolationName.C
+
+To the Make/options the following entry to the include path must be added :
+-I./GGIInterpolation 
+
+
+Thats it type wmake libso at the rotorStatorInterfaces directory level and 
+the libRotorStatorInterfaces.so should be compiled.
+how to use it is described in the corresponding tutorial.

@@ -1,0 +1,10 @@
+This version works only for OpenFOAM-1.5-dev.
+Additional information to the DiplomarbeitFranzBlaim.pdf file, 
+the described cyclic ggi implementation was just a simple cyclic ggi implementation. 
+Therefore it was not committed, because the cyclicGGI which is under development by 
+Martin Beaudon is much more versatile.
+The same is true for the phaselagged boundary condition it was not added to the repository, 
+because it has not shown a success. 
+If somebody is interested in the source code of the phase lagged boundary condition just send a 
+email to: franz[dot]blaim[at]gmx[dot]de
+

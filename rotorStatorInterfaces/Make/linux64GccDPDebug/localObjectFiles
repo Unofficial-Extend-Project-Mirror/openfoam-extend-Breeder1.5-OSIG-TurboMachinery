@@ -1,0 +1,15 @@
+LOCAL_OBJECTS = \
+primitiveRotationalPatch.o\
+primitiveMixingPlanePatch.o\
+mixingPlaneFvPatch.o\
+mixingPlaneFvPatchFields.o\
+mixingPlanePolyPatch.o\
+mixingPlanePointPatch.o\
+domainScalingPolyPatch.o\
+domainScalingPointPatch.o\
+domainScalingLduInterface.o\
+domainScalingLduInterfaceField.o\
+domainScalingFvsPatchFields.o\
+domainScalingFvPatch.o\
+domainScalingFvPatchFields.o\
+primitiveDomainScalingPatch.o

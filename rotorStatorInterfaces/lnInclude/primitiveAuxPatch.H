@@ -1,0 +1,1 @@
+../primitiveRotationalPatch/primitiveAuxPatch.H
