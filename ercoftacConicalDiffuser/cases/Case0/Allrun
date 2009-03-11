@@ -4,6 +4,9 @@
 
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
+# Load additional RunFunctions 
+. ../../tools/RunFunctionsSupplemental
+
 #We stop this script when we encounter a problem
 trap "exit -1" ERR
 
@@ -15,17 +18,17 @@ m4 -P blockMeshDict.m4 > blockMeshDict
 popd >& /dev/null
 
 echo "$caseName: Running blockMesh"
-runApplication blockMesh
+runApplicationAndReportOnError blockMesh
 
 echo "$caseName: Creating the starting time directory"
 cp -r 0_orig 0
 
 echo "$caseName: Running simpleFoam"
-runApplication simpleFoam
+runApplicationAndReportOnError simpleFoam
 
 echo "$caseName: Postprocessing"
 cd postProcessing 
-runApplication sample -case .. -time 500
-runApplication gnuplot compareAll.gplt
+runApplicationAndReportOnError sample -case .. -time 500
+runApplicationAndReportOnError gnuplot compareAll.gplt
 
 

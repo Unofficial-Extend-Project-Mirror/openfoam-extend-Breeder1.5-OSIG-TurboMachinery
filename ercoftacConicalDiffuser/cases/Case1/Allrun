@@ -4,6 +4,9 @@
 
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
+# Load additional RunFunctions 
+. ../../tools/RunFunctionsSupplemental
+
 #We stop this script when we encounter a problem
 trap "exit -1" ERR
 
@@ -21,16 +24,16 @@ echo "$caseName: Creating the starting time directory"
 cp -r 0_orig 0
 
 echo "$caseName: Running addSwirlAndRotation"
-runApplication addSwirlAndRotation
+runApplicationAndReportOnError addSwirlAndRotation
 
 echo "$caseName: Running simpleFoam"
-runApplication simpleFoam
+runApplicationAndReportOnError simpleFoam
 
 echo "$caseName: Postprocessing"
 cd postProcessing
-runApplication sample -case .. -time 1000             
-gnuplot compareAll.gplt    >& log.gnuplotCompareAll   
-runApplication foamLog ../log.simpleFoam              
-gnuplot plotResiduals.gplt >& log.gnuplotPlotResiduals
+runApplicationAndReportOnError sample -case .. -time 1000             
+runApplicationAndReportOnError gnuplot compareAll.gplt   ; mv log.gnuplot log.gnuplotCompareAll   
+runApplicationAndReportOnError foamLog ../log.simpleFoam              
+runApplicationAndReportOnError gnuplot plotResiduals.gplt; mv log.gnuplot log.gnuplotPlotResiduals
 
 
