@@ -1,1 +1,0 @@
-../primitiveRotationalPatch/calcRotationalGeometry.C

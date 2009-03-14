@@ -1,1 +1,0 @@
-../mixingPlane/fvPatchField/mixingPlaneFvPatchFieldsFwd.H

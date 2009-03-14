@@ -1,1 +1,0 @@
-../domainScaling/primitiveDomainScalingPatch/primitiveDomainScalingPatch.C

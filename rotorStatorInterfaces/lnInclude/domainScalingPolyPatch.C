@@ -1,1 +1,0 @@
-../domainScaling/polyPatch/domainScalingPolyPatch.C

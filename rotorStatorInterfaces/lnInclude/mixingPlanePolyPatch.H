@@ -1,1 +1,0 @@
-../mixingPlane/polyPatch/mixingPlanePolyPatch.H

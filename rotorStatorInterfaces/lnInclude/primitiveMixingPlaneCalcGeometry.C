@@ -1,1 +1,0 @@
-../mixingPlane/primitiveMixingPlanePatch/primitiveMixingPlaneCalcGeometry.C

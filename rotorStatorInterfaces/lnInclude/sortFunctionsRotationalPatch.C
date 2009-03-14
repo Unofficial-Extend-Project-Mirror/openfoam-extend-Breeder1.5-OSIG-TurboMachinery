@@ -1,1 +1,0 @@
-../primitiveRotationalPatch/sortFunctionsRotationalPatch.C

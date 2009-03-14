@@ -1,1 +1,0 @@
-../domainScaling/pointPatch/domainScalingPointPatch.H

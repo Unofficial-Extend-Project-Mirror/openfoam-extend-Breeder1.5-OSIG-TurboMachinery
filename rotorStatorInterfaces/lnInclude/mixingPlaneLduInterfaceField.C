@@ -1,1 +1,0 @@
-../mixingPlane/LduInterface/mixingPlaneLduInterfaceField.C
