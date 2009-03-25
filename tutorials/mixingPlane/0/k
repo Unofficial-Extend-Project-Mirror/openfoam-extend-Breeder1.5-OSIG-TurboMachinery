@@ -1,0 +1,93 @@
+/*---------------------------------------------------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.4                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+// Field Dictionary
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+
+    root            "turbFoam";
+    case            "cavity";
+    instance        "0";
+    local           "";
+
+    class           volScalarField;
+    object          k;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+dimensions      [0 2 -2 0 0 0 0];
+
+internalField   uniform 5e-05;
+
+boundaryField
+{
+    Half      
+    {
+        type            zeroGradient;
+    }
+
+    Full    
+    {
+        type            zeroGradient;
+    }
+	
+    Solid 
+    {
+  	type            zeroGradient;
+    }
+
+    slave    
+    {
+ 	type            mixingPlaneFvPatchField;
+        zeroGradient    false;    
+    }
+    
+    master    
+    {
+ 	type            mixingPlaneFvPatchField;
+        zeroGradient    true;
+    }
+
+    Rest
+    {	
+	type            zeroGradient;
+    }
+
+    Back
+    {
+ 	type            zeroGradient;
+    }
+
+    stator3
+    {
+       type cyclic;
+    }
+
+    stator2
+    {
+       type cyclic;
+    }
+
+    stator1
+    {
+       type cyclic;
+    }
+
+    crotor
+    {
+       type cyclic;
+    }
+}
+
+
+// ************************************************************************* //

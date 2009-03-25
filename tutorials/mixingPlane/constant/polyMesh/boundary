@@ -1,0 +1,104 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5-dev                               |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "constant/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+11
+(
+    Half
+    {
+        type            patch;
+        nFaces          400;
+        startFace       166240;
+    }
+    Full
+    {
+        type            patch;
+        nFaces          400;
+        startFace       166640;
+    }
+    master
+    {
+        type            mixingPlane;
+        nFaces          800;
+        startFace       167040;
+    shadowPatch slave;
+    hierarchy master;
+    origin (0 0 0);
+    axis (0 0 1);
+    direction (0 1 0);
+
+    }
+    slave
+    {
+        type            mixingPlane;
+        nFaces          1120;
+        startFace       167840;
+    shadowPatch master;
+    hierarchy slave;
+    origin (0 0 0);
+    axis (0 0 1);
+    direction (0 1 0);
+
+    }
+    Back
+    {
+        type            patch;
+        nFaces          1120;
+        startFace       168960;
+    }
+    Solid
+    {
+        type            patch;
+        nFaces          1600;
+        startFace       170080;
+    }
+    crotor
+    {
+        type            cyclic;
+        nFaces          2400;
+        startFace       171680;
+        featureCos      0.9;
+    }
+    stator1
+    {
+        type            cyclic;
+        nFaces          800;
+        startFace       174080;
+        featureCos      0.9;
+    }
+    stator2
+    {
+        type            cyclic;
+        nFaces          800;
+        startFace       174880;
+        featureCos      0.9;
+    }
+    stator3
+    {
+        type            cyclic;
+        nFaces          800;
+        startFace       175680;
+        featureCos      0.9;
+    }
+    Rest
+    {
+        type            patch;
+        nFaces          2880;
+        startFace       176480;
+    }
+)
+
+// ************************************************************************* //
