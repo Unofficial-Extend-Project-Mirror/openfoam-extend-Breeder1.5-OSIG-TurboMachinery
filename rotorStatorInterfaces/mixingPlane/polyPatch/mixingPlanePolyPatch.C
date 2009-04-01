@@ -73,6 +73,7 @@ Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
         Info << "In constructor" << endl ;    
 }
 
+#if 0
 // Construct from Istream
 /*Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
 (
@@ -96,6 +97,7 @@ rotPatch_(NULL)
 /* ;        
         
    } */  
+#endif
     
 // Construct from dictionary
 Foam::mixingPlanePolyPatch::mixingPlanePolyPatch

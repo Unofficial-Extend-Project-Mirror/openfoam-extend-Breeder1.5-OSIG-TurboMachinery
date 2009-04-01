@@ -261,11 +261,10 @@ tmp<Field<Type> > primitiveDomainScalingPatch::interpolateToNeighbour
              masterToPatchPtr_ = new ggiMMInterpolation
              (
                   *primPatch_,
-                  targetPatch,          
-		  tensorField(targetPatch.size(),
-		  tensor(1,0,0,0,1,0,0,0,1) ),
-                  tensorField( (*primPatch_).size(),
-		  tensor(1,0,0,0,1,0,0,0,1) )                   
+                  targetPatch, 
+                   tensorField(0),
+                   tensorField(0),
+                   vectorField(0)
              );
          
          }

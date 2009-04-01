@@ -85,10 +85,9 @@ tmp<Field<Type> > primitiveMixingPlanePatch::MakeCircumferentialAverage
           (
                   *primPatch_,
                    masterPatch,         
-                  tensorField(masterPatch.size(),
-		   tensor(1,0,0,0,1,0,0,0,1) ),
-                   tensorField( (*primPatch_).size(),
-		   tensor(1,0,0,0,1,0,0,0,1) )
+                   tensorField(0),
+                   tensorField(0),
+                   vectorField(0)
            );
 
        }
@@ -178,10 +177,9 @@ tmp<Field<Type> > primitiveMixingPlanePatch::MakeCircumferentialAverage
                (
                   *primPatch_,
                   masterPatch,         
-                 tensorField(masterPatch.size(),
-		   tensor(1,0,0,0,1,0,0,0,1) ),
-                   tensorField( (*primPatch_).size(),
-		   tensor(1,0,0,0,1,0,0,0,1) )
+                   tensorField(0),
+                   tensorField(0),
+                   vectorField(0)
                );
          }
        
@@ -256,11 +254,10 @@ tmp<Field<Type> > primitiveMixingPlanePatch::MakeCircumferentialAverage
                masterToPatchPtr_ = new ggiMMInterpolation
                (
                    *primPatch_,
-                   masterPatch,         
-		  tensorField(masterPatch.size(),
-		   tensor(1,0,0,0,1,0,0,0,1) ),
-                   tensorField( (*primPatch_).size(),
-		   tensor(1,0,0,0,1,0,0,0,1) )
+                   masterPatch,  
+                   tensorField(0),
+                   tensorField(0),
+                   vectorField(0)
                    // Contact_Sphere checks for a intersection on a sphere
                    // delivers very good results for a cylindrical surface
                    // but for the axial case it delivers bad results
