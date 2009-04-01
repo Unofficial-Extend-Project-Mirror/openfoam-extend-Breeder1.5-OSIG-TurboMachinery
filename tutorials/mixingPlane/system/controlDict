@@ -22,8 +22,6 @@ FoamFile
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-libs ("/home/lc1bfrbl/OpenFOAM/lc1bfrbl-1.5-dev/lib/linux64GccDPDebug/libRotorStatorInterfaces.so");
-
 
 application     icoFoam;
 
@@ -61,6 +59,8 @@ maxCo  0.2;
 
 maxDeltaT 1;
 
+
+libs ("libOpenFOAM.so" "libRotorStatorInterfaces.so");
 
 
 // ************************************************************************* //
