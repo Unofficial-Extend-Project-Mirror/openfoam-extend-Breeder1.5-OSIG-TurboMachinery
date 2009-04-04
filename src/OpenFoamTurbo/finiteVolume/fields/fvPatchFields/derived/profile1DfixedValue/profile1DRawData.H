@@ -154,7 +154,10 @@ public:
     // Constructor
     profile1DRawData(std::string nameFile, std::string typeFile);
 
-    bool is_valid() {return is_validFlag;}
+    bool is_valid()
+    {
+        return is_validFlag;
+    }
 
     int get_values                 (std::string key, std::vector<double> &values, bool exitOnInvalidKey = true);
     int get_r                      (std::vector<double> &r);

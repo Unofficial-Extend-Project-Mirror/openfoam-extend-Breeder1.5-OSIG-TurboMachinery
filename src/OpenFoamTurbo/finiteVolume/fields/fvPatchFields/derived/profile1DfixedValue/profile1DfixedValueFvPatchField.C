@@ -2,7 +2,7 @@
  =========                   |
  \\      /   F ield          | OpenFOAM: The Open Source CFD Toolbox
   \\    /    O peration      |
-   \\  /     A nd            | Copyright Hydro-Quebec - IREQ, 2008
+   \\  /     A nd            | Copyright Hydro-Quebec - IREQ, 2009
     \\/      M anipulation   |
 -------------------------------------------------------------------------------
 License
@@ -135,7 +135,15 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
     fileFormat_(ptf.fileFormat_),
     interpolateCoord_(ptf.interpolateCoord_),
     fieldName_(ptf.fieldName_),
-    fieldScaleFactor_(ptf.fieldScaleFactor_)
+    fieldScaleFactor_(ptf.fieldScaleFactor_),
+    //
+    interpolateVector_(ptf.interpolateVector_),
+    mappedV_axial_(ptf.mappedV_axial_),
+    mappedV_radial_(ptf.mappedV_radial_),
+    mappedV_circum_(ptf.mappedV_circum_),
+    mappedPressure_(ptf.mappedPressure_),
+    mappedTke_(ptf.mappedTke_),
+    mappedEpsilon_(ptf.mappedEpsilon_)
 {
     fvPatchField<Type>::operator==(profile1DValue_);
 }
@@ -214,36 +222,23 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
             )   << "problem with file: " << fileName_ << " : format : " << fileFormat_ << abort(FatalError);
     }
 
-    std::vector<double> interpolateVector; // radius for radial profile, z for meridian profile
-                                           // and sorting key values for the profiles
-
-    std::map<double, double> sortedV_axial;   // key: interpolateVector, value : v_axial
-    std::map<double, double> sortedV_radial;  // key: interpolateVector, value : v_radial
-    std::map<double, double> sortedV_circum;  // key: interpolateVector, value : v_circum
-    std::map<double, double> sortedPressure;  // key: interpolateVector, value : pressure
-    std::map<double, double> sortedTke;       // key: interpolateVector, value : tke
-    std::map<double, double> sortedEpsilon;   // key: interpolateVector, value : epsilon
-    
-
+    // Grab the interpolateVector_  with validation of the key value
     // Profile type: radial or meridian profile
-    std::string basekey;
+    // Unsorted
     switch(type_profile)
     {
         case R:
-            basekey = profile1DRawData::KEY_R;
+            turboCSV_profile.get_r(interpolateVector_);
             break;	
         case Z:
-            basekey = profile1DRawData::KEY_Z;
+            turboCSV_profile.get_z(interpolateVector_);
             break;
         default:
             break;
     }
 
-    // Grab the interpolateVector
-    turboCSV_profile.get_values(basekey,interpolateVector);  // With validation of the key value
-
     // Do just a quick validation in order to detect problems early
-    if(interpolateVector.size() < 2)
+    if(interpolateVector_.size() < 2)
     {
         FatalErrorIn (
             "profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField(const fvPatch& p, const DimensionedField<Type, volMesh>& iF, const dictionary& dict)"
@@ -253,8 +248,7 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
 		<< abort(FatalError);
     }
 
-    scalar key; // key value for sorting map
-
+    // Next, grab the desired field
     switch(type_field)
     {
         case VELOCITY_X:  
@@ -271,15 +265,10 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
                 turboCSV_profile.get_velocityRadial(v_radial);
                 turboCSV_profile.get_velocityCircumferential(v_circum);
 
-                // sort values in increasing order
-                int i = 0;
-                forAllIter(std::vector<double> , interpolateVector, interpolateValue)
-                {
-                    key                 = *interpolateValue;
-                    sortedV_axial[key]  = v_axial[i];
-                    sortedV_radial[key] = v_radial[i];
-                    sortedV_circum[key] = v_circum[i++];
-                }
+                // map values according to interpolateVector
+                mapFieldValues(v_axial,  interpolateVector_, mappedV_axial_);
+                mapFieldValues(v_radial, interpolateVector_, mappedV_radial_);
+                mapFieldValues(v_circum, interpolateVector_, mappedV_circum_);
             }
             break;
 		
@@ -290,13 +279,8 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
                 // Read unsorted values
                 turboCSV_profile.get_pressure(pressure);
 
-                // sort values in increasing order
-                int i = 0;
-                forAllIter(std::vector<double> , interpolateVector, interpolateValue)
-                {
-                    key                 = *interpolateValue;
-                    sortedPressure[key] = pressure[i++];
-                }
+                // map values according to interpolateVector
+                mapFieldValues(pressure,  interpolateVector_, mappedPressure_);
             }
 
             break;
@@ -308,13 +292,8 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
                 // Read unsorted values
                 turboCSV_profile.get_tke(tke);
 
-                // sort values in increasing order
-                int i = 0;
-                forAllIter(std::vector<double> , interpolateVector, interpolateValue)
-                {
-                    key            = *interpolateValue;
-                    sortedTke[key] = tke[i++];
-                }
+                // map values according to interpolateVector
+                mapFieldValues(tke,  interpolateVector_, mappedTke_);
             }
             break;
 		
@@ -325,13 +304,8 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
                 // Read unsorted values
                 turboCSV_profile.get_epsilon(epsilon);
 
-                // sort values in increasing order
-                int i = 0;
-                forAllIter(std::vector<double> , interpolateVector, interpolateValue)
-                {
-                    key                = *interpolateValue;
-                    sortedEpsilon[key] = epsilon[i++];
-                }
+                // map values according to interpolateVector
+                mapFieldValues(epsilon,  interpolateVector_, mappedEpsilon_);
             }
             break;
 		
@@ -339,23 +313,88 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
             break;
     }
 			
-    // Now that the maps are initialized, we can sort the interpolateVector values in ascending order; we will use those values
-    // as keys in order to retrieve the different profiles values from the different maps.
-    std::sort(interpolateVector.begin(), interpolateVector.end());
+    // Now that the maps are initialized, we can sort the interpolateVector_ values in ascending order for interpolation;
+    // We will use those values as keys in order to retrieve the profiles values from the different maps.
+    std::sort(interpolateVector_.begin(), interpolateVector_.end());
 
     if(debug)
     {
         std::cout << "interpolation vector: " << (type_profile == R ? profile1DRawData::KEY_R : profile1DRawData::KEY_Z) << " : ";
-        std::copy(interpolateVector.begin(), interpolateVector.end(), std::ostream_iterator<double>(std::cout, " "));
+        std::copy(interpolateVector_.begin(), interpolateVector_.end(), std::ostream_iterator<double>(std::cout, " "));
         std::cout << std::endl;
-        std::cout << "interpolateVector.begin(): " << *interpolateVector.begin() << std::endl;
-        std::cout << "interpolateVector.end(): " <<   *(--interpolateVector.end()) << std::endl;
+        std::cout << "interpolateVector_.begin(): " << *interpolateVector_.begin() << std::endl;
+        std::cout << "interpolateVector_.end(): " <<   *(--interpolateVector_.end()) << std::endl;
         std::cout << std::endl;
     }
 
+    // Update the profile value for the patch
+    this->updateCoeffs();
+    
+}
+
+
+template<class Type>
+profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
+(
+    const profile1DfixedValueFvPatchField<Type>& ptf,
+    const DimensionedField<Type, volMesh>& iF
+)   :
+    fixedValueFvPatchField<Type>(ptf, iF),
+    profile1DValue_(ptf.profile1DValue_),
+    fileName_(ptf.fileName_),
+    fileFormat_(ptf.fileFormat_),
+    interpolateCoord_(ptf.interpolateCoord_),
+    fieldName_(ptf.fieldName_),
+    fieldScaleFactor_(ptf.fieldScaleFactor_),
+    //
+    interpolateVector_(ptf.interpolateVector_),
+    mappedV_axial_(ptf.mappedV_axial_),
+    mappedV_radial_(ptf.mappedV_radial_),
+    mappedV_circum_(ptf.mappedV_circum_),
+    mappedPressure_(ptf.mappedPressure_),
+    mappedTke_(ptf.mappedTke_),
+    mappedEpsilon_(ptf.mappedEpsilon_)
+{
+    if(debug)
+        Info << "profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField(const profile1DfixedValueFvPatchField<Type>& ptf, const DimensionedField<Type, volMesh>& iF)" << endl;
+	
+    fvPatchField<Type>::operator==(profile1DValue_);
+}
+
+
+// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
+
+// Map from self
+template<class Type>
+void profile1DfixedValueFvPatchField<Type>::autoMap
+(
+    const fvPatchFieldMapper& m
+)
+{
+    Field<Type>::autoMap(m);
+    profile1DValue_.autoMap(m);
+}
+
+
+// Update the coefficients associated with the patch field
+template<class Type>
+void profile1DfixedValueFvPatchField<Type>::updateCoeffs()
+{
+    if (this->updated())
+    {
+        return;
+    }
+
+    // Recover enum for interpolateCoord
+    profile1DType type_profile = string_to_profile1DType(interpolateCoord_);
+
+    // Recover enum for fieldName
+    profile1DField type_field = string_to_profile1DField(fieldName_);
+	
     // Grab the min and max value of interpolateValue in order to do check the bounds before trying to interpolate
-    scalar min_interpolateVector = *interpolateVector.begin();
-    scalar max_interpolateVector = *(--interpolateVector.end());
+    scalar min_interpolateVector_ = *interpolateVector_.begin();
+    scalar max_interpolateVector_ = *(--interpolateVector_.end());
+
 
     // Face centers
 #if defined _OPENFOAM_1_3
@@ -390,23 +429,23 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
             radius;                  // interpolateCoord: R
 
 
-        // Verify if the interpolation value is within the bounds of the interpolateVector
-        if(interpolateValue < min_interpolateVector || interpolateValue > max_interpolateVector )
+        // Verify if the interpolation value is within the bounds of the interpolateVector_
+        if(interpolateValue < min_interpolateVector_ || interpolateValue > max_interpolateVector_ )
         {
             // We don't support any kind of extrapolation, so this is a fatal error.
             FatalErrorIn (
                 "profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField(const fvPatch& p, const DimensionedField<Type, volMesh>& iF, const dictionary& dict)"
             )
-                << "interpolateValue outside of interpolateVector bounds: " << endl
+                << "interpolateValue outside of interpolateVector_ bounds: " << endl
                     << "      interpolateValue: " << interpolateValue
-                    << " : min(interpolateVector) : " << min_interpolateVector
-                    << " : max(interpolateVector) : " << max_interpolateVector
+                    << " : min(interpolateVector_) : " << min_interpolateVector_
+                    << " : max(interpolateVector_) : " << max_interpolateVector_
                     << abort(FatalError);
         }
 
         // Find the inferior and superior bounds for the interpolation interval
         std::vector<double>::iterator upperBound, lowerBound;
-        upperBound = lowerBound = std::upper_bound(interpolateVector.begin(), interpolateVector.end(), interpolateValue);
+        upperBound = lowerBound = std::upper_bound(interpolateVector_.begin(), interpolateVector_.end(), interpolateValue);
         lowerBound--;
 
         if( debug > 5 )
@@ -444,9 +483,9 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
             case VELOCITY  :
                 {
                     // linear interpolation: interpol_velocityI = v_I[b_inf] + (v_I[b_sup] - v_I[b_inf]) * ratio_interval;
-                    double interpol_velocityAxial           = interpolateInterval( sortedV_axial[*lowerBound],  sortedV_axial[*upperBound],  ratio_interval );
-                    double interpol_velocityRadial          = interpolateInterval( sortedV_radial[*lowerBound], sortedV_radial[*upperBound], ratio_interval );
-                    double interpol_velocityCircumferential = interpolateInterval( sortedV_circum[*lowerBound], sortedV_circum[*upperBound], ratio_interval );
+                    double interpol_velocityAxial           = interpolateInterval( mappedV_axial_[*lowerBound],  mappedV_axial_[*upperBound],  ratio_interval );
+                    double interpol_velocityRadial          = interpolateInterval( mappedV_radial_[*lowerBound], mappedV_radial_[*upperBound], ratio_interval );
+                    double interpol_velocityCircumferential = interpolateInterval( mappedV_circum_[*lowerBound], mappedV_circum_[*upperBound], ratio_interval );
                     vector Vcyl( interpol_velocityRadial, interpol_velocityCircumferential, interpol_velocityAxial );
 			
                     // Conversion from cylindrical velocity to cartesian velocity
@@ -502,19 +541,19 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
                 break;
             case PRESSURE:
                 {
-                    scalar interpol_pressure = interpolateInterval(sortedPressure[*lowerBound], sortedPressure[*upperBound], ratio_interval);
+                    scalar interpol_pressure = interpolateInterval(mappedPressure_[*lowerBound], mappedPressure_[*upperBound], ratio_interval);
                     profile1DValue_[faceI] = pTraits<Type>::one * interpol_pressure;
                 }
                 break;
             case K:
                 {
-                    scalar interpol_k = interpolateInterval(sortedTke[*lowerBound], sortedTke[*upperBound], ratio_interval);
+                    scalar interpol_k = interpolateInterval(mappedTke_[*lowerBound], mappedTke_[*upperBound], ratio_interval);
                     profile1DValue_[faceI] = pTraits<Type>::one * interpol_k;
                 }
                 break;
             case EPSILON:
                 {
-                    scalar interpol_epsilon = interpolateInterval(sortedEpsilon[*lowerBound], sortedEpsilon[*upperBound], ratio_interval);
+                    scalar interpol_epsilon = interpolateInterval(mappedEpsilon_[*lowerBound], mappedEpsilon_[*upperBound], ratio_interval);
                     profile1DValue_[faceI] = pTraits<Type>::one * interpol_epsilon;
                 }
                 break;
@@ -528,56 +567,21 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
     }
 
     fvPatchField<Type>::operator==(profile1DValue_);
-}
-
-
-template<class Type>
-profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
-(
-    const profile1DfixedValueFvPatchField<Type>& ptf,
-    const DimensionedField<Type, volMesh>& iF
-)   :
-    fixedValueFvPatchField<Type>(ptf, iF),
-    profile1DValue_(ptf.profile1DValue_),
-    fileName_(ptf.fileName_),
-    fileFormat_(ptf.fileFormat_),
-    interpolateCoord_(ptf.interpolateCoord_),
-    fieldName_(ptf.fieldName_),
-    fieldScaleFactor_(ptf.fieldScaleFactor_)
-{
-    if(debug)
-        Info << "profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField(const profile1DfixedValueFvPatchField<Type>& ptf, const DimensionedField<Type, volMesh>& iF)" << endl;
-	
-    fvPatchField<Type>::operator==(profile1DValue_);
-}
-
-
-// * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
-
-// Map from self
-template<class Type>
-void profile1DfixedValueFvPatchField<Type>::autoMap
-(
-    const fvPatchFieldMapper& m
-)
-{
-    Field<Type>::autoMap(m);
-    profile1DValue_.autoMap(m);
-}
-
-
-// Update the coefficients associated with the patch field
-template<class Type>
-void profile1DfixedValueFvPatchField<Type>::updateCoeffs()
-{
-    if (this->updated())
-    {
-        return;
-    }
-	
-    fvPatchField<Type>::operator==(profile1DValue_);
-	
+    
     fixedValueFvPatchField<Type>::updateCoeffs();
+}
+
+// Map a list of values using a list of keys
+template<class Type>
+void profile1DfixedValueFvPatchField<Type>::mapFieldValues(
+    std::vector<double>&      unsortedVal,
+    std::vector<double>&      keys,
+    std::map<double, double>& mappedVal) const
+{
+    // map values with keys using a std::map
+    int i = 0;
+    forAllIter(std::vector<double> , keys, keysValue)
+        mappedVal[*keysValue] = unsortedVal[i++];
 }
 
 
@@ -602,7 +606,7 @@ void profile1DfixedValueFvPatchField<Type>::write(Ostream& os) const
     os.writeKeyword("fieldScaleFactor")
         << fieldScaleFactor_ << token::END_STATEMENT << nl;
 		
-    // To output the values at the center of the patches
+    // To output the values at the patch face centers
     this->writeEntry("value",os);
 }
 

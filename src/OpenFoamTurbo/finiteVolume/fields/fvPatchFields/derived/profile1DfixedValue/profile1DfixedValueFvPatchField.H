@@ -87,6 +87,9 @@ Authors
 #ifndef profile1DfixedValueFvPatchField_H
 #define profile1DfixedValueFvPatchField_H
 
+#include <map>
+#include <vector>
+
 #include "fixedValueFvPatchFields.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
@@ -111,6 +114,16 @@ class profile1DfixedValueFvPatchField : public fixedValueFvPatchField<Type>
     string      fieldName_;        // Name of the field : "Velocity", "Pressure", "K", "Epsilon"
     scalar      fieldScaleFactor_; // Scale factor. Default: 1.0
 
+    std::vector<double> interpolateVector_; // radius for radial profile, z for meridian profile
+                                           // and sorting key values for the profiles
+
+    std::map<double, double> mappedV_axial_;   // key: interpolateVector, value : v_axial
+    std::map<double, double> mappedV_radial_;  // key: interpolateVector, value : v_radial
+    std::map<double, double> mappedV_circum_;  // key: interpolateVector, value : v_circum
+    std::map<double, double> mappedPressure_;  // key: interpolateVector, value : pressure
+    std::map<double, double> mappedTke_;       // key: interpolateVector, value : tke
+    std::map<double, double> mappedEpsilon_;   // key: interpolateVector, value : epsilon
+    
 public:
 
     //- Runtime type information
@@ -205,6 +218,12 @@ public:
 
     //- Update the coefficients associated with the patch field
     virtual void updateCoeffs();
+
+    //- Map a list of values using a list of keys
+    void mapFieldValues(
+        std::vector<double>&      unsortedVal,
+        std::vector<double>&      keys,
+        std::map<double, double>& mappedVal) const;
 
     //- Write
     virtual void write(Ostream&) const;
