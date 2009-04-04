@@ -328,8 +328,9 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
     }
 
     // Update the profile value for the patch
+    this->updateProfileValues();
+
     this->updateCoeffs();
-    
 }
 
 
@@ -385,6 +386,18 @@ void profile1DfixedValueFvPatchField<Type>::updateCoeffs()
         return;
     }
 
+    if(this->dimensionedInternalField().mesh().changing())
+        updateProfileValues();
+
+    fvPatchField<Type>::operator==(profile1DValue_);
+    
+    fixedValueFvPatchField<Type>::updateCoeffs();
+}
+
+// Update the profile values
+template<class Type>
+void profile1DfixedValueFvPatchField<Type>::updateProfileValues()
+{
     // Recover enum for interpolateCoord
     profile1DType type_profile = string_to_profile1DType(interpolateCoord_);
 
@@ -517,23 +530,23 @@ void profile1DfixedValueFvPatchField<Type>::updateCoeffs()
 
                     switch(type_field)
                     {
-			case VELOCITY_X:
+                        case VELOCITY_X:
                             profile1DValue_[faceI] = pTraits<Type>::one * Vcart[0];
                             break;
 				
-			case VELOCITY_Y:
+                        case VELOCITY_Y:
                             profile1DValue_[faceI] = pTraits<Type>::one * Vcart[1];
                             break;
 
-			case VELOCITY_Z:
+                        case VELOCITY_Z:
                             profile1DValue_[faceI] = pTraits<Type>::one * Vcart[2];
                             break;
 
-			case VELOCITY:
+                        case VELOCITY:
                             assignVector(profile1DValue_[faceI], Vcart);
                             break;
 
-			default:
+                        default:
                             break;
                     }
 
@@ -565,11 +578,8 @@ void profile1DfixedValueFvPatchField<Type>::updateCoeffs()
         if(fieldScaleFactor_ != 1.0)
             profile1DValue_[faceI] *= fieldScaleFactor_;
     }
-
-    fvPatchField<Type>::operator==(profile1DValue_);
-    
-    fixedValueFvPatchField<Type>::updateCoeffs();
 }
+
 
 // Map a list of values using a list of keys
 template<class Type>

@@ -219,6 +219,9 @@ public:
     //- Update the coefficients associated with the patch field
     virtual void updateCoeffs();
 
+    //- Update the profile values
+    virtual void updateProfileValues();
+
     //- Map a list of values using a list of keys
     void mapFieldValues(
         std::vector<double>&      unsortedVal,
