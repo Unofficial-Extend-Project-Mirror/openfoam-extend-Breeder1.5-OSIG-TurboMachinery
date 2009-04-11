@@ -192,6 +192,8 @@ class primitiveDomainScalingPatch
          */        
         List<tensor>  slaveTensorList_;
         
+
+    
         /**
          * \brief{Devides the given patch into radialy spaced slices .}
          * \date{01-04-2008}
@@ -297,6 +299,17 @@ class primitiveDomainScalingPatch
         (
             const Field<Type>& sourceField
         ) const;
+
+
+    /**
+     * \brief{Used to build a rotational symmetric patch for the slave targetpatch}
+     * \date{11-04-2009}
+     * \param{targetPatch the original targetPatch}
+     * \param{lastFieldAdress scalar which marks the end of the field}
+     * This function is used to generate 360 degree for the target Patch.
+     */
+    template<class Patch>
+    Patch& buildSlave360Patch(const Patch& targetPatch,scalar& lastFieldAdress);
 
         /**
          * \brief{Used to distribute the values other the interpoaltion disk .}

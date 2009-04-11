@@ -181,6 +181,15 @@ tmp<Field<Type> > primitiveDomainScalingPatch::cloneField
    return (tFirst);
 }
 
+
+template<class Patch>
+Patch& buildSlave360Patch(const Patch& targetPatch,scalar& lastFieldAdress)
+{
+    Patch newPatch = new Patch;
+
+    return newPatch;
+}
+
 template<class Type, class Patch> 
 tmp<Field<Type> > primitiveDomainScalingPatch::interpolateToNeighbour
 (
@@ -199,16 +208,19 @@ tmp<Field<Type> > primitiveDomainScalingPatch::interpolateToNeighbour
     
      Field<Type>&  firstField = tFirst();
    
+     scalar lastFieldAdress = 0;
      
      // TODO FB Must be called otherwise the interpolation does not work correctly
       
      if(!masterToPatchPtr_)
        {
-Info << "207" << endl;
+           //  the slave 360 degree patch must be built here 
+           Patch slavePatch =  buildSlave360Patch(targetPatch,lastFieldAdress );
               masterToPatchPtr_ = new ggiMMInterpolation
               (
                    *primPatch_, // Master patch
-                   targetPatch,  // Slave patch      
+                   targetPatch,  // Slave patch 
+                                 // This patch must also a 360 degree patch 
                    tensorField(0),
                    tensorField(0),
                    vectorField(0)
