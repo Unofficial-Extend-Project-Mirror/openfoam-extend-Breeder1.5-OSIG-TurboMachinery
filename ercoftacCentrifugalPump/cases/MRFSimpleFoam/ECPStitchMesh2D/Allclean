@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ -d ECPGgi2D_orig ] ; then
+     case=ECPGgi2D;
+elif [ -d ECPStitchMesh2D_orig ]; then
+      case=ECPStitchMesh2D;
+else
+    echo "sorry, you need to have ECPGgi2D_orig or ECPStitchMesh2D_orig in the current folder";
+fi
+
+
+rm -r ${case}
+rm -r rotor2D
+rm -r stator2D

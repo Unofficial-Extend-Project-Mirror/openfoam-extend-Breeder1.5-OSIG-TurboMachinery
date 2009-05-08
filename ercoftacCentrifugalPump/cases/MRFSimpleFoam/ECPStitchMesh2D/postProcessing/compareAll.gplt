@@ -1,0 +1,5 @@
+
+
+call "validate.gplt" "0" "../../../../measurements/testcaseU3/CRCU0.DAT" 
+call "plotResiduals.gplt"  
+

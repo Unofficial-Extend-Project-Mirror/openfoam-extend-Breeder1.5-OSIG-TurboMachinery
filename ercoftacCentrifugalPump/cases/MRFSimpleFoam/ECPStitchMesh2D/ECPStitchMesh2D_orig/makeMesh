@@ -1,0 +1,43 @@
+#!/bin/bash
+
+
+### Creation of the MRFSimpleFoamStitchMesh2D case. Note that in the case should be already a 0_orig/ system/ and constant/ folder ###
+
+cp -r 0_orig 0
+cp -r ../rotor2D/constant/polyMesh constant/
+mergeMeshes . . .. stator2D
+rm -r constant/polyMesh
+mv 1/polyMesh constant
+rm -r 1/
+
+### Those steps give you a constant/polyMesh that contains the whole mesh. You still need to put the right definitions by hand to each patches. As it takes some times, a boundary.mergMeshes including the right name is in constant, you just need to call it. ###
+
+rm -r constant/polyMesh/boundary
+cp constant/boundary.mergeMeshes constant/polyMesh/boundary
+
+### Stitching your case now ###
+
+stitchMesh GGI_INT GGI_EXT 
+rm -r constant/polyMesh
+mv 1/polyMesh constant/
+rm -r 1/
+
+### If you let the constant/polyMesh/boundary in this way, you will get an error message when you will try to compute. It will complains that you have two patches empty, so that you need to delete them, as well as correcting the numbers of the patch in boundary. To be more practical, I already did it in constant/boundary.stitchMesh. ###
+
+cp constant/boundary.stitchMesh constant/polyMesh/boundary
+
+### now that the case is done, setting up MRFSimpleFoam ###
+
+cellSet -case ../rotor2D
+setsToZones -noFlipMap -case ../rotor2D
+cp ../rotor2D/constant/polyMesh/cellZones.gz constant/polyMesh
+
+cellSet
+cp system/faceSetDict_rotorFaces system/faceSetDict
+faceSet
+cp system/faceSetDict_noBoundaryFaces system/faceSetDict
+faceSet
+setsToZones -noFlipMap
+
+
+

@@ -1,0 +1,68 @@
+#-------------------------------------------------------------------------
+#------------------------------------------------------------------------- 
+
+#  $0: starting angle
+#  $1: measurement data sheet, that varies according to the four positions of the rotor. 
+
+pause 0 "arg0 : $0"
+pause 0 "arg1 : $1"
+
+      UrIn=11.4       # [m/s]
+      rIn=0.1         # [m]
+      rOut=0.365      # [m]
+      rBladeTip=0.210 # [m], impellet blade tip radius
+      rMes=0.2142     # [m], measurement position
+
+      omega=-2000*2.*pi/60. # -2000RPM : [rad/s]
+      U2=-omega*rBladeTip  # [m/s] 
+      Vmes=omega*rMes     # [m/s]
+ 
+      set   autoscale                        # scale axes automatically
+      unset log                              # remove any log-scaling
+      unset label                            # remove any previous labels
+      set xtic auto                          # set xtics automatically
+      set ytic auto                          # set ytics automatically
+
+#Pick output format (also at each plot below)
+      set terminal png medium
+      #set term postscript eps color enh "Times-BoldItalic"
+      #set term postscript color  # color
+      #set term postscript        # black and white
+      #Enhanced Metafile Format, for vectorized MS Win32 plots:
+      #set terminal emf monochrome dashed 'Times' 20
+
+#Velocity validation:
+
+      #set output "Wr_$0.ps"
+      #set output "Wr_$0.eps"
+      set output "Wr_$0.png"
+      #set output "Wr_$0.emf"
+      set title "radial relative velocity"
+      set xlabel "angle"
+      set ylabel "radial velocity"
+      set xrange [0:2] 
+      plot          "postProcessing_data" \
+                     using ((-$0+$$11)/100.314*2.):((($$8)*cos($$11*pi/180.)+($$9)*sin($$11*pi/180.))/U2) title "computational results" with lines \
+          ,\
+          "$1" \
+                     using ($$2==0.5 ? $$1 : 1/0):($$3) title "experimental results" with lines linewidth 2\
+
+
+#Velocity validation:
+
+      #set output "Wu_$0.ps"
+      #set output "Wu_$0.eps"
+      set output "Wu_$0.png"
+      #set output "Wu_$0.emf"
+      set title "tangential relative velocity"
+      set xlabel "angle"
+      set ylabel "tangential velocity"
+      set xrang [0:2]
+      plot          "postProcessing_data" \
+                     using ((-$0+$$11)/100.314*2.):( -( (-($$8)*sin($$11*pi/180.)+($$9)*cos($$11*pi/180.)) - Vmes)/U2 ) title "computational results" with lines \
+	, \
+		"$1" \
+                     using ($$2==0.5 ? $$1 : 1/0):( -(-$$4 - Vmes/U2) ) title "experimental results"  with lines linewidth 2\
+	
+
+	

@@ -1,0 +1,54 @@
+#!/bin/bash
+
+if [ -d ECPGgi2D_orig ] ; then
+     case=ECPGgi2D;                                                                   			  ### this part sets
+elif [ -d ECPStitchMesh2D_orig ]; then                                                                    ### variable $case to
+      case=ECPStitchMesh2D;                                                                               ### frozenRotorGgi2D or
+else                                                                                                      ### frozenRotorGgi2D
+    echo "sorry, you need to have ECPStitchMesh2D_orig or ECPGgi2D_orig in the current folder";		  ### depending on the case studied.
+fi
+
+###-------------Saving the datas----------------###
+
+cp -r rotor2D_orig rotor2D										  ### Backup of the initial directories
+cp -r stator2D_orig stator2D 										  ### Those three directories should stay unchanged
+cp -r ${case}_orig ${case}										  ### to allow a reseting of the case
+
+###------- some clean-up-------###
+
+rm -rf rotor2D/.svn
+rm -rf rotor2D/system/.svn
+rm -rf rotor2D/constant/.svn
+rm -rf stator2D/.svn
+rm -rf stator2D/system/.svn
+rm -rf stator2D/constant/.svn
+rm -rf ${case}/.svn
+rm -rf ${case}/0_orig/.svn
+rm -rf ${case}/system/.svn
+rm -rf ${case}/constant/.svn
+rm -rf ${case}/0/.svn
+
+
+
+###------------making the mesh---------------###
+
+fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
+fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+
+
+							                        ## (optional) rotating the rotor so that its position corresponds to the ones that give ##
+##transformPoints -case rotor2D -rotate "((1 0 0)(0.995957356 0.089827305 0))"  ## t/Ti=0.226 in [1] ##
+##transformPoints -case rotor2D -rotate "((1 0 0)(0.983862111 0.178928331 0))"  ## t/Ti=0.326 in [1] ##
+##transformPoints -case rotor2D -rotate "((1 0 0)(0.963812057 0.266582669 0))"  ## t/Ti=0.426 in [1] ##
+
+
+###------------Building the case-----------###
+
+pushd ${case} 									## starting the script makeMesh that is located in ## 
+./makeMesh									## ${case}/makeMesh ##
+
+###-----------launching the comuptations------###
+
+MRFSimpleFoam >> log_MRF_0 
+popd
+

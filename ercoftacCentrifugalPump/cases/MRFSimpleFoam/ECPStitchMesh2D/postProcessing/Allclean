@@ -1,0 +1,6 @@
+#!/bin/bash
+
+rm -r logs
+rm *.png
+rm test_magU_p_k_epsilon_Ux_Uy_Uz.xy 
+rm postProcessing_data

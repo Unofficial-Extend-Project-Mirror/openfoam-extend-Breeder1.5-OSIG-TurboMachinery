@@ -1,0 +1,3 @@
+faceSet GGI_INT_ZONE new patchToFace GGI_INT
+faceSet GGI_EXT_ZONE new patchToFace GGI_EXT
+quit

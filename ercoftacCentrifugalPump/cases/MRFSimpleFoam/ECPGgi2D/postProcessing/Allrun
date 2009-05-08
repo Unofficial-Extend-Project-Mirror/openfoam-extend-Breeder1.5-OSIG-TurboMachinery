@@ -1,0 +1,25 @@
+#!/bin/bash
+
+
+if [ -d ../ECPGgi2D_orig ] ; then
+     case=ECPGgi2D;                                                                                       ### this part sets
+elif [ -d ../ECPStitchMesh2D_orig ]; then                                                                    ### variable $case to
+      case=ECPStitchMesh2D;                                                                               ### frozenRotorGgi2D or
+else                                                                                                      ### frozenRotorGgi2D
+    echo "sorry, you need to have ECPStitchMesh2D_orig or ECPGgi2D_orig in the current folder";           ### depending on the case studied.
+fi
+
+###--------postprocessing----###
+
+foamCalc mag U -case ../${case} -latestTime
+foamCalc components U -case ../${case} -latestTime
+foamLog ../${case}/log_MRF_0
+
+###--------sampling---------###
+
+sample -case ../${case} -latestTime
+cp ../${case}/sets/5000/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data
+
+gnuplot compareAll.gplt
+mozilla file://$PWD/compareAll.html

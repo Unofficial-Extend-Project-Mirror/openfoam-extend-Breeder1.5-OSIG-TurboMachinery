@@ -1,0 +1,34 @@
+
+set output 'residuals.png'
+set terminal png medium
+#set output 'residuals.eps'
+#set term postscript color  # color
+#set term postscript        # black and white
+
+set autoscale
+set noarrow
+set nolabel
+set nogrid
+set grid
+set logscale y
+
+set xlabel 'Iteration'
+set ylabel 'Residual'
+set title 'ECPGgi2D '
+
+#
+plot \
+     "logs/Ux_0" \
+     title "Ux_0" with lines linewidth 2 \
+     , \
+     "logs/Uy_0" \
+     title "Uy_0" with lines linewidth 2 \
+     , \
+     "logs/p_0" \
+     title "p_0" with lines linewidth 2 \
+     , \
+     "logs/k_0" \
+     title "k_0" with lines linewidth 2 \
+     , \
+     "logs/epsilon_0" \
+     title "epsilon_0" with lines linewidth 2 \
