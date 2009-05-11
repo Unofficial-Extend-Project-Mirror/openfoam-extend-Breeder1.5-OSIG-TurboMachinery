@@ -69,14 +69,6 @@ trackDictionaryContent
        sectionEndSeparator   "############ End of: _sectionIdToken_############";
    }
 
-   ggiCheck
-    {
-       // Type of functionObject
-       type ggiCheck;
-       phi phi;
-       // Where to load it from (if not already in solver)
-       functionObjectLibs ("libsampling.so");
-    }
  );
 
 libs ("libOpenFoamTurbo.so");
