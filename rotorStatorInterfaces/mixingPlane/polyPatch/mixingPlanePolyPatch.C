@@ -67,6 +67,7 @@ Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
     polyPatch(name, size, start, index, bm),
     shadow_("slave"),
     master_("master"),
+    nameOmega_("Omega"),
     shadowIndex_(-1),
     rotPatch_(NULL)
 {
@@ -110,7 +111,8 @@ Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
 :
     polyPatch(name, dict, index, bm),
     shadow_(dict.lookup("shadowPatch")),
-    master_(dict.lookup("hierarchy")),   
+    master_(dict.lookup("hierarchy")),  
+    nameOmega_("Omega"), 
     shadowIndex_(-1),
     origin_(dict.lookup("origin")),
     axis_(dict.lookup("axis")),
@@ -130,6 +132,7 @@ Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
     polyPatch(pp, bm),
     shadow_(pp.shadow_),
     master_(pp.master_),    
+    nameOmega_(pp.nameOmega_),
     shadowIndex_(-1)
 {
 //        rotPatch_.writePatches(pp.name())     
@@ -153,6 +156,7 @@ Foam::mixingPlanePolyPatch::mixingPlanePolyPatch
     polyPatch(pp, bm, index, newSize, newStart),
     shadow_(pp.shadow_),
     master_(pp.master_),    
+    nameOmega_(pp.master_),
     shadowIndex_(-1)
 {  
         Info << "In constructor" << endl;

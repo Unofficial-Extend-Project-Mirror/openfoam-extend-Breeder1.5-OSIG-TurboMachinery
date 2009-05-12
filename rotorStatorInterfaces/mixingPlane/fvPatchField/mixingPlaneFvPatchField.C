@@ -93,7 +93,6 @@ mixingPlaneFvPatchField<Type>::mixingPlaneFvPatchField
     
     // checking if extensive
   
-    
     if( dict.found("extensive") )
     {
         Switch extensive
@@ -106,11 +105,7 @@ mixingPlaneFvPatchField<Type>::mixingPlaneFvPatchField
     else
     {
         bextensive_ = false;        
-    }
-    
-   /* Info << fieldName_ 
-         << "bextensive " << bextensive_ << endl;*/
-    
+    }   
     
     if( dict.found("rhoName") )
     {
@@ -124,8 +119,7 @@ mixingPlaneFvPatchField<Type>::mixingPlaneFvPatchField
         rhoName_= word("false");
         Info << "RhoName " <<  rhoName_ << endl;
     }    
-   
-    
+     
     word btest(dict.lookup("zeroGradient"));
     
     if( btest == "true" )
@@ -137,12 +131,7 @@ mixingPlaneFvPatchField<Type>::mixingPlaneFvPatchField
     {
         bzeroGradient_ = false;
         
-    }
-    
-    
-//    Info << "In constructor "<< endl;
-//    fvPatchField<Type>::operator=(this->patchInternalField()); // Dangerous
-    
+    }    
     
 }
 
@@ -180,8 +169,6 @@ mixingPlaneFvPatchField<Type>::mixingPlaneFvPatchField
             << "Patch type: " << this->patch().type()
             << exit(FatalError);
     }
-   // fvPatchField<Type>::operator= (this->patchInternalField());
-   // Info << "In Copy constructor "<< endl;
 }
 
 template<class Type>
@@ -359,6 +346,46 @@ tmp<Field<Type> > mixingPlaneFvPatchField<Type>::gradientBoundaryCoeffs() const
     }
 }
 
+template<class Type>
+vectorField mixingPlaneFvPatchField<Type>::getCorrectedOmega() const
+{
+    word OmegaName = mixingPlanePatch_.getNameOmega();
+
+    typedef GeometricField<vector, fvPatchField, volMesh> GeoField;   
+
+   const vectorField& OmegaSurfShadowP = 
+    refCast<const Field<vector> >
+    (
+        mixingPlanePatch_.shadow().lookupPatchField<GeoField,vector>( OmegaName  )
+    );  
+
+
+    const vectorField& OmegaSurfP = 
+    refCast<const Field<vector> >
+    (
+        mixingPlanePatch_.lookupPatchField<GeoField,vector>( OmegaName  )
+    );  
+
+    
+    
+    scalar returnValue=0;
+    if( OmegaSurfShadowP.size() > 0)
+    {
+        returnValue =  mag(OmegaSurfShadowP[0]);
+    }
+
+// Iterate through all vectorField components and
+// telling it the magnitude of the shadow Omega
+    vectorField modOmega(OmegaSurfP.size());
+    forAll(OmegaSurfP,i)
+    {
+        modOmega[i] = OmegaSurfP[i] - OmegaSurfShadowP[0];
+    }
+
+    return (modOmega);
+}
+
+
 template<class Type> 
 template<class Average>
 tmp<Field<Average> > mixingPlaneFvPatchField<Type>::makeCircumferentialAverage
@@ -384,8 +411,18 @@ tmp<Field<Average> > mixingPlaneFvPatchField<Type>::makeCircumferentialAverage
     (
         mixingPlanePatch_.lookupPatchField<GeoField,vector>("U")
     );  
+
+    vectorField correctedOmega = getCorrectedOmega();
+
+    vectorField faceCenterPositionVector = getFaceCenterPositionVectors();
+// Note CrcSurfP is the circumferential velocity component on the surface
+    vectorField CircSurfP = correctedOmega ^ faceCenterPositionVector;
+
     vectorField massField( USurfP.size() );
-    
+// USurfP is the absolute velocity on the surface of the Patch    
+// To get the relative velocity on the surface of the patch teh following is applied
+
+    vectorField relSurfP = USurfP + CircSurfP;
       
   // Info << *this << fieldName_ << endl;
   // Info << "RhoName " << rhoName_ << endl;
@@ -395,7 +432,7 @@ tmp<Field<Average> > mixingPlaneFvPatchField<Type>::makeCircumferentialAverage
         
         forAll(USurfP, i)
         {
-             massField[i] = srho*USurfP[i];        
+             massField[i] = srho*relSurfP[i];        
         }       
     }
     else
@@ -408,15 +445,15 @@ tmp<Field<Average> > mixingPlaneFvPatchField<Type>::makeCircumferentialAverage
             //rhoName_)
         );
                 
-        if(USurfP.size() != rhoSurf.size())
+        if(relSurfP.size() != rhoSurf.size())
         {
            // Info << "Error " << endl;
         }
         
      
-        forAll(USurfP, i)
+        forAll(relSurfP, i)
         {
-             massField[i] = rhoSurf[i]*USurfP[i];        
+             massField[i] = rhoSurf[i]*relSurfP[i];        
         }
     }  
 
@@ -489,6 +526,24 @@ tmp<Field<Average> > mixingPlaneFvPatchField<Type>::makeCircumferentialAverage
         Info << "In Neighbourfield Master " << fieldName_ << endl;    
     
     return (tFirst);
+}
+
+template<class Type> 
+vectorField  mixingPlaneFvPatchField<Type>::getFaceCenterPositionVectors() const
+{
+    mixingPlanePolyPatch patch = mixingPlanePatch_.GetmixingPlanePolyPatch();
+    const List<face>& faces    = patch.getOrigPatch().localFaces();
+    const pointField& points   = patch.getOrigPatch().localPoints();
+    
+    vectorField returnField( faces.size() );
+    
+    vector origin( patch.origin() );
+    forAll(faces,i)
+    {
+        returnField[i] = faces[i].centre(points) - origin;
+    }
+
+    return (returnField);
 }
 
 template<class Type> 

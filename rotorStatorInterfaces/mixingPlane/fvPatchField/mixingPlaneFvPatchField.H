@@ -298,7 +298,13 @@ public:
                 
             }
             
+            vectorField  getFaceCenterPositionVectors() const;
             
+        
+    vectorField getCorrectedOmega() const ;
+               
+                
+           
             /**
              * \brief{To fix the value this operator has been disabled}
              * \date{20-08-2008}

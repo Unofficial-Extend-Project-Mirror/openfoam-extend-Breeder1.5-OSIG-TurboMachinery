@@ -183,10 +183,79 @@ tmp<Field<Type> > primitiveDomainScalingPatch::cloneField
 
 
 template<class Patch>
-Patch& buildSlave360Patch(const Patch& targetPatch,scalar& lastFieldAdress)
-{
-    Patch newPatch = new Patch;
+Patch& buildSlave360Patch(const Patch& targetPatch,scalar& lastFieldAdress/*, scalar& diffPhi*/)
+{ 
+    //label numOfSubPatches = label(360)/label(diffPhi);
+/*    
+    List<face> sliceFaces;
+    sliceFaces.setSize(0);
+    List<face> AllFaces;
+    AllFaces.setSize(0);
+    
+    // Patch faceNormals gives back a normalized normal.
+    vectorField faceNormals = targetPatch.faceNormals();
+    
+    pointField origPoints = targetPatch.localPoints();
+    
+    List<face> localFaces = targetPatch.localFaces();
 
+    // Average over all the face normals
+    vector AverageNormal(0, 0, 0);
+
+    forAll(faceNormals, iNormals)
+    {
+        AverageNormal = AverageNormal + faceNormals[iNormals];
+    }
+
+    AverageNormal = AverageNormal / faceNormals.size();
+
+    if (mag(AverageNormal.x() ) < SMALL)
+        AverageNormal.x() = 0;
+
+    if (mag(AverageNormal.y()) < SMALL)
+        AverageNormal.y() = 0;
+
+    if (mag(AverageNormal.z() ) < SMALL)
+        AverageNormal.z() = 0;
+    
+    for (label nPP = 0; nPP < numOfSubPatches; nPP++)
+    {
+        forAll(localFaces, i)
+        {
+            labelList llP(OrigPatch_[i].size() );
+            forAll(localFaces[i], j)
+            {
+                llP[j] = localFaces[i][j] + nPP * ( origPoints.size() );
+            }
+
+            face tmpFace(llP);
+           
+            vector firstNormal = tmpFace.normal( localPoints_ );
+
+            if(mag(firstNormal) == 0)
+            {
+                Info << "Error " << endl;
+            }
+            firstNormal /= mag(firstNormal);
+
+            labelList llPtmp = llP;
+
+            //TODO Make this the first step
+            if (mag(firstNormal - AverageNormal) > SMALL)
+            {  
+                forAll(llP, k)
+                {
+                    llPtmp[k] = llP[llP.size()-1-k];
+                }
+            }
+            
+            llP = llPtmp;
+
+            AllFaces.setSize(AllFaces_.size() + 1);
+            AllFaces[AllFaces.size() - 1] = face(llP);
+        }
+        }*/
+                          Patch newPatch = new Patch(/*AllFaces,origPoints*/);
     return newPatch;
 }
 

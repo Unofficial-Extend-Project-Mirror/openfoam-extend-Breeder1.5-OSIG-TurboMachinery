@@ -1,7 +1,7 @@
 /*---------------------------------------------------------------------------*\
   =========                 |
   \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
-   \\    /   O peration     |
+  \\    /   O peration     |
     \\  /    A nd           | Copyright (C) 2008 Franz Blaim All rights reserved
      \\/     M anipulation  |
 -------------------------------------------------------------------------------
@@ -163,7 +163,12 @@ public:
                    return false;
                 }
             }
-            
+    
+        word getNameOmega() const
+        {
+            return mixingPlanePolyPatch_.getNameOmega();
+        }
+
             /**
             * \brief{ Return slave patch.}
             */

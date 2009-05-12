@@ -468,6 +468,10 @@ public:
     // TODO Must be enabled when it is included as a dynamic library
     TypeName("PrimitiveRadialpatch"); 
 
+    const primitivePatch& getOrigPatch()
+    {
+        return OrigPatch_;
+    }
 
     // Constructors
 

@@ -214,6 +214,7 @@ void primitiveDomainScalingPatch::generatePointList(const labelList& MaxCB,
     {        
         forAll(origPoints,j)
         {
+            // The cloning and the rotation of the points takes place here
             localPoints_.setSize(localPoints_.size() + 1 );
             localPoints_[origSize*i+j] = origPoints[j];
             localPoints_[origSize*i+j].y() = localPoints_[origSize*i+j].y() + 
@@ -298,7 +299,7 @@ void primitiveDomainScalingPatch::generateNewFaceList()
             }
 
             face tmpFace(llP);
-           
+            // At that time the localPoints_ contain the rotated and cloned points
             vector firstNormal = tmpFace.normal( localPoints_ );
 
             if(mag(firstNormal) == 0)
@@ -326,24 +327,7 @@ void primitiveDomainScalingPatch::generateNewFaceList()
             
         }
         
-    }
-    
-//    tensorList_.clear();
-//    // Was used for the cylindrical coordinate transformation
-//    // But has not shown effect on the radial testcase 
-//    // it still failed
-//    forAll(AllFaces_,i)
-//    {      
-//                 
-//       tensorList_.setSize(tensorList_.size() + 1 );
-//                
-//       point faceCenter = AllFaces_[i].centre(localPoints_);
-//                  
-//       tensor rotation = tensorFromCCSToCartesian(faceCenter);// makeRotationTensor(theta);
-//   
-//       tensorList_[i] = rotation; 
-//  
-//   }    
+    }  
 }
 
 void primitiveDomainScalingPatch::calcuteMovedPoints()
@@ -416,26 +400,6 @@ void primitiveDomainScalingPatch::calcuteMovedPoints()
            }
            osNew << endl;
        } 
-     
-// Calculate the Coordinate Transformation tensor
-
-   // Was used for the cylindrical coordinate transformation
-   // But has not shown effect on the radial testcase 
-   // it still failed
-//   tensorList_.clear();
-//   
-//   forAll(AllFaces_,i)
-//   {      
-//                
-//      tensorList_.setSize(tensorList_.size() + 1 );
-//               
-//      point faceCenter = AllFaces_[i].centre(localPoints_);
-//                 
-//      tensor rotation = tensorFromCCSToCartesian(faceCenter);// makeRotationTensor(theta);
-//  
-//      tensorList_[i] = rotation; 
-// 
-//  }
    
 }
 

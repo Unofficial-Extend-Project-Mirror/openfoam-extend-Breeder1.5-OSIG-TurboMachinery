@@ -76,6 +76,8 @@ class mixingPlanePolyPatch
         vector direction_;
         
         mutable primitiveMixingPlanePatch* rotPatch_;
+
+    word nameOmega_;
         
 protected:
 
@@ -227,6 +229,7 @@ public:
          */
         bool master() const
         {
+
             if(master_ == "master")
             {
                return true;
@@ -254,6 +257,12 @@ public:
         {
             return !master();
         }
+
+
+    const word& getNameOmega() const
+    {
+        return (this->nameOmega_);
+    }
 
         /**
         * \brief{Give back the shadowPatch.}
@@ -329,6 +338,11 @@ public:
         vector direction()const
         {
             return direction_;
+        }
+        
+        const primitivePatch& getOrigPatch()
+        {
+            return (*rotPatch_).getOrigPatch();
         }
         
 //        void writePatches():

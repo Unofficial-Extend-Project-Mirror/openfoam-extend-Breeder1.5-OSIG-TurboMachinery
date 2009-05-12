@@ -158,9 +158,6 @@ class primitiveMixingPlanePatch
         //- Correct patches after moving points
         virtual void movePoints(const pointField& p);
         
-       
-        
-        
         template<class Type > 
         Field<Type> Average
         (
@@ -231,20 +228,6 @@ public:
             bool blockMeshDict
         );
         
-        /**
-         * \brief{Constructor with additional clipping points}
-         * \param<OrigPatch> {Original Patch for getting the bounding edges for this patch}
-         * \param<PointsCorners> {additional clipping points used for specifying the corners of the patch}
-         *         
-         */        
-//        primitiveMixingPlanePatch
-//        (       
-//                const List<face>& faces, 
-//                const pointField& points,
-//                //const primitivePatch& rotationalPatch,
-//                const word& name
-//        );
-
         //- Construct as copy
         //TODO Copyconstructor must be correctly implemented
         primitiveMixingPlanePatch(const primitiveMixingPlanePatch&);
