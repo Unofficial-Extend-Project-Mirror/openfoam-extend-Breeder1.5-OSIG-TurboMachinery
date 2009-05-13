@@ -77,8 +77,10 @@ convHistory.writeDataArray( "FinalResidual", final_res_dims, final_res_array );
 
 // FlowEquationSet
 CGNSOO::GoverningEquationsType_t equationSet = CGNSOO::GoverningEquationsNull;
+#if defined CGNSTOFOAM_EXTRACT_FlowEquationSet
 if ( application == "simpleFoam" ) equationSet = CGNSOO::NSTurbulentIncompressible;
 else if ( application == "icoFoam" ) equationSet = CGNSOO::NSLaminar;
+#endif
 
 CGNSOO::FlowEquationSet_t cgnsFlowEq = cgnsBase.writeFlowEquationSet(physDim);
 switch( equationSet )

@@ -218,6 +218,8 @@ int main(int argc, char *argv[])
 	
 	// What kind of simulation is this?
 	bool steadyState = false;
+
+#if defined CGNSTOFOAM_EXTRACT_FlowEquationSet
 	word application( runTime.controlDict().lookup( "application" ) );
 	if ( application=="simpleFoam" )
 	{
@@ -239,6 +241,8 @@ int main(int argc, char *argv[])
 		Info << "Warning : unknown application : " << application << endl;
 		Info << "Warning : will not include FlowEquationSet in the CGNS file" << endl;
 	}
+#endif //CGNSTOFOAM_EXTRACT_FlowEquationSet
+
 	
 #if 1
 	std::string logfilename = args.caseName() + "/log";
