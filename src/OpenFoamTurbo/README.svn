@@ -1,0 +1,26 @@
+Description
+===========
+This part of the repository is for the the library OpenFoamTurbo from the 
+TurboMachinery Special Interest Group.
+
+Library content:
+================
+
+- profile1DfixedValue: This class implements a cylindrical boundary condition field defined
+                       by a 1D fixed value profile (radial ou vertical)
+
+
+- rotatingPressureDirectedInletVelocity : Contribution from Oliver Borm : Temporarily disabled from the compilation.
+- rotatingSplitVelocity                 : Contribution from Oliver Borm : Temporarily disabled from the compilation.
+- rotatingTotalTemperature              : Contribution from Oliver Borm : Temporarily disabled from the compilation.
+
+
+Maintainers
+===========
+Hakan Nilsson,   Chalmers University of Technology
+Maryse Page,     Hydro-Quebec Research Institute
+Martin Beaudoin, Hydro-Quebec Research Institute
+Oliver Borm,     Technische Universitat Munchen
+
+
+
