@@ -5,9 +5,9 @@ derivedFvPatchFields = $(fvPatchFields)/derived
 
 $(derivedFvPatchFields)/profile1DfixedValue/profile1DfixedValueFvPatchFields.C
 $(derivedFvPatchFields)/profile1DfixedValue/profile1DRawData.C
-//$(derivedFvPatchFields)/rotatingTotalTemperature/rotatingTotalTemperatureFvPatchScalarField.C
 //$(derivedFvPatchFields)/rotatingPressureDirectedInletVelocity/rotatingPressureDirectedInletVelocityFvPatchVectorField.C
 //$(derivedFvPatchFields)/rotatingSplitVelocity/rotatingSplitVelocityFvPatchVectorField.C
+//$(derivedFvPatchFields)/rotatingTotalTemperature/rotatingTotalTemperatureFvPatchScalarField.C
 
 LIB = $(FOAM_USER_LIBBIN)/libOpenFoamTurbo
 

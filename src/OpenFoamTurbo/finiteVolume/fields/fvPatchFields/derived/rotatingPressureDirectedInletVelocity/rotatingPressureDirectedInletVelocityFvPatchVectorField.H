@@ -28,14 +28,18 @@ Class
 Description
     Based on the direction of the absolute velocity vector and the
     angular velocity vector, the components of the relative velocity
-    vector are determined.
+    vector are determined. You can choose if you want to specify the
+    inlet direction in cartesian or cylindrical coordinates.
 
     Example of the boundary condition specification:
     @verbatim
     inlet
     {
         type rotatingPressureDirectedInletVelocity;
-        inletDirection  uniform (0 0 -1);           // direction of the absolute velocity vector
+        inletDirection  uniform (0 0 -1);           // direction of the absolute velocity vector C
+        // in case of cartesian coordinates it is defined as:   ( Cx/|C| Cy/|C| Cz/|C| );
+        // in case of cylindrical coordinates it is defined as: ( Cr/|C| Cu/|C| Cz/|C| );
+        cylindricalCCS  yes;                        // Switch between cartesian and cylindrical coordinates
         omega           (0 0 500.0);                // angular velocity vector
         value           uniform (0 0 -10);          // Initial Value
     }
@@ -55,6 +59,7 @@ Author
 
 #include "fvPatchFields.H"
 #include "fixedValueFvPatchFields.H"
+#include "Switch.H"
 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -72,6 +77,9 @@ class rotatingPressureDirectedInletVelocityFvPatchVectorField
     // Private data
     
         vectorField inletDir_;
+
+        //- Is the supplied inlet value in cartesian or cylindrical coordinates?
+        Switch cylindricalCCS_;
 
         //- Angular velocity of the frame
         vector omega_;
