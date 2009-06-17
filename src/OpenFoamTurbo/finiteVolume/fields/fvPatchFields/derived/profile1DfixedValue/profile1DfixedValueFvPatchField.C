@@ -50,7 +50,7 @@ Description
             fileFormat       "turboCSV";           // Format of the file. turboCSV is a simple CSV file format
             interpolateCoord "Z";                  // The interpolation coordinate: "R"=radial, "Z"=vertical
             fieldName        "Velocity";           // The field we want to apply the profile to :
-	                                           // "Velocity", "K", "Epsilon", "Pressure"
+	                                           // "Velocity", "K", "Epsilon", "Omega", "Pressure"
             fieldScaleFactor  0.001;               // Scale factor for the field. This entry is optional. 
                                                    // The default is 1.0 
         }
@@ -62,6 +62,7 @@ Description
         Velocity : "Velocity Axial" and "Velocity Radial" and "Velocity Circumferential"
         K        : "Turbulence Kinetic Energy"
         Epsilon  : "Turbulence Eddy Dissipation"
+        Omega    : "Turbulence Specific Dissipation Rate"
         Pressure : "Pressure"
 
 
@@ -143,7 +144,8 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
     mappedV_circum_(ptf.mappedV_circum_),
     mappedPressure_(ptf.mappedPressure_),
     mappedTke_(ptf.mappedTke_),
-    mappedEpsilon_(ptf.mappedEpsilon_)
+    mappedEpsilon_(ptf.mappedEpsilon_),
+    mappedOmega_(ptf.mappedOmega_)
 {
     fvPatchField<Type>::operator==(profile1DValue_);
 }
@@ -309,6 +311,18 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
             }
             break;
 		
+        case OMEGA:
+            {
+                std::vector<double> omega;
+
+                // Read unsorted values
+                turboCSV_profile.get_omega(omega);
+
+                // map values according to interpolateVector
+                mapFieldValues(omega,  interpolateVector_, mappedOmega_);
+            }
+            break;
+		
         default:
             break;
     }
@@ -354,7 +368,8 @@ profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField
     mappedV_circum_(ptf.mappedV_circum_),
     mappedPressure_(ptf.mappedPressure_),
     mappedTke_(ptf.mappedTke_),
-    mappedEpsilon_(ptf.mappedEpsilon_)
+    mappedEpsilon_(ptf.mappedEpsilon_),
+    mappedOmega_(ptf.mappedOmega_)
 {
     if(debug)
         Info << "profile1DfixedValueFvPatchField<Type>::profile1DfixedValueFvPatchField(const profile1DfixedValueFvPatchField<Type>& ptf, const DimensionedField<Type, volMesh>& iF)" << endl;
@@ -568,6 +583,12 @@ void profile1DfixedValueFvPatchField<Type>::updateProfileValues()
                 {
                     scalar interpol_epsilon = interpolateInterval(mappedEpsilon_[*lowerBound], mappedEpsilon_[*upperBound], ratio_interval);
                     profile1DValue_[faceI] = pTraits<Type>::one * interpol_epsilon;
+                }
+                break;
+            case OMEGA:
+                {
+                    scalar interpol_omega = interpolateInterval(mappedOmega_[*lowerBound], mappedOmega_[*upperBound], ratio_interval);
+                    profile1DValue_[faceI] = pTraits<Type>::one * interpol_omega;
                 }
                 break;
             default  : 

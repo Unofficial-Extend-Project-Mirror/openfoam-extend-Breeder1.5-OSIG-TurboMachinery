@@ -88,12 +88,13 @@ inline std::string toLower (const std::string & str)
 #define _PRESSURE_STR_TOKEN   "Pressure"    // scalar field
 #define _K_STR_TOKEN          "K"           // scalar field
 #define _EPSILON_STR_TOKEN    "Epsilon"     // scalar field
+#define _OMEGA_STR_TOKEN      "Omega"       // scalar field
 
 #define _RADIAL_STR_TOKEN     "R"           // radial profile
 #define _MERIDIAN_STR_TOKEN   "Z"           // meridian profile
 
 // Conversion string to enum for each field types
-enum profile1DField {BAD_FIELD=0, VELOCITY, VELOCITY_X, VELOCITY_Y, VELOCITY_Z, PRESSURE, K, EPSILON};
+enum profile1DField {BAD_FIELD=0, VELOCITY, VELOCITY_X, VELOCITY_Y, VELOCITY_Z, PRESSURE, K, EPSILON, OMEGA};
 typedef std::map<const std::string, const profile1DField> m_profile1DFieldXlate_from_string;
 
 const m_profile1DFieldXlate_from_string::value_type profile1DFieldXlate_map_init[] = {
@@ -103,7 +104,8 @@ const m_profile1DFieldXlate_from_string::value_type profile1DFieldXlate_map_init
     m_profile1DFieldXlate_from_string::value_type( toLower(_VELOCITY_Z_STR_TOKEN), VELOCITY_Z),
     m_profile1DFieldXlate_from_string::value_type( toLower(_PRESSURE_STR_TOKEN),   PRESSURE),
     m_profile1DFieldXlate_from_string::value_type( toLower(_K_STR_TOKEN),          K),
-    m_profile1DFieldXlate_from_string::value_type( toLower(_EPSILON_STR_TOKEN),    EPSILON)
+    m_profile1DFieldXlate_from_string::value_type( toLower(_EPSILON_STR_TOKEN),    EPSILON),
+    m_profile1DFieldXlate_from_string::value_type( toLower(_OMEGA_STR_TOKEN),    OMEGA)
 };
 
 // Conversion string to enum for each profile types
@@ -168,6 +170,7 @@ public:
     int get_pressure               (std::vector<double> &pressure);
     int get_tke                    (std::vector<double> &tke);
     int get_epsilon                (std::vector<double> &epsilon);
+    int get_omega                  (std::vector<double> &omega);
 
     // Keys to identify the columns data in turboCSV file
     const static std::string KEY_R;
@@ -178,6 +181,7 @@ public:
     const static std::string KEY_PRESSURE;
     const static std::string KEY_TKE;
     const static std::string KEY_EPSILON;
+    const static std::string KEY_OMEGA;
 
     // Error codes
     const static int TURBO_CSV_INVALID_VALUE_KEY = -1;

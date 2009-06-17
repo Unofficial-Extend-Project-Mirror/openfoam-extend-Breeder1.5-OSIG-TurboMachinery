@@ -156,6 +156,7 @@ const std::string profile1DRawData::KEY_VELOCITY_CIRCUMFERENTIAL = "Velocity Cir
 const std::string profile1DRawData::KEY_PRESSURE                 = "Pressure";
 const std::string profile1DRawData::KEY_TKE                      = "Turbulence Kinetic Energy";
 const std::string profile1DRawData::KEY_EPSILON                  = "Turbulence Eddy Dissipation";
+const std::string profile1DRawData::KEY_OMEGA                    = "Turbulence Specific Dissipation Rate";
 
 // Constructor
 profile1DRawData::
@@ -434,6 +435,11 @@ int profile1DRawData::get_tke(std::vector<double>                     &tke)
 int profile1DRawData::get_epsilon(std::vector<double>                 &epsilon)
 {
     return get_values(KEY_EPSILON, epsilon); // With validation by default 
+}
+	
+int profile1DRawData::get_omega(std::vector<double>                   &omega)
+{
+    return get_values(KEY_OMEGA, omega); // With validation by default 
 }
 	
 } // End namespace Foam

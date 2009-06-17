@@ -50,7 +50,7 @@ Description
             fileFormat       "turboCSV";           // Format of the file. turboCSV is a simple CSV file format
             interpolateCoord "Z";                  // The interpolation coordinate: "R"=radial, "Z"=vertical
             fieldName        "Velocity";           // The field we want to apply the profile to :
-	                                           // "Velocity", "K", "Epsilon", "Pressure"
+	                                           // "Velocity", "K", "Epsilon", "Omega", "Pressure"
             fieldScaleFactor  0.001;               // Scale factor for the field. This entry is optional. 
                                                    // The default is 1.0 
         }
@@ -62,6 +62,7 @@ Description
         Velocity : "Velocity Axial" and "Velocity Radial" and "Velocity Circumferential"
         K        : "Turbulence Kinetic Energy"
         Epsilon  : "Turbulence Eddy Dissipation"
+        Omega    : "Turbulence Specific Dissipation Rate"
         Pressure : "Pressure"
 
 
@@ -111,7 +112,7 @@ class profile1DfixedValueFvPatchField : public fixedValueFvPatchField<Type>
     fileName    fileName_;         // Name of the csv data file. Must be ocated under /constant/
     string      fileFormat_;       // turboCSV
     string      interpolateCoord_; // R or Z
-    string      fieldName_;        // Name of the field : "Velocity", "Pressure", "K", "Epsilon"
+    string      fieldName_;        // Name of the field : "Velocity", "Pressure", "K", "Epsilon", "Omega"
     scalar      fieldScaleFactor_; // Scale factor. Default: 1.0
 
     std::vector<double> interpolateVector_; // radius for radial profile, z for meridian profile
@@ -123,6 +124,7 @@ class profile1DfixedValueFvPatchField : public fixedValueFvPatchField<Type>
     std::map<double, double> mappedPressure_;  // key: interpolateVector, value : pressure
     std::map<double, double> mappedTke_;       // key: interpolateVector, value : tke
     std::map<double, double> mappedEpsilon_;   // key: interpolateVector, value : epsilon
+    std::map<double, double> mappedOmega_;     // key: interpolateVector, value : omega
     
 public:
 
