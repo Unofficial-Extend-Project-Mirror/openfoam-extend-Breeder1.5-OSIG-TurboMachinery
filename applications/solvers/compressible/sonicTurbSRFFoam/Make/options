@@ -1,0 +1,20 @@
+// We need to specify where we can locate libOpenFoamTurbo
+// Eventually, those packages will get integrated to the main OpenFOAM version
+// In the meantime, we hardcode those values, using relative paths to $PWD.
+
+LIBOPENFOAMTURBOHOME=$(PWD)/../../../../src/OpenFoamTurbo
+
+EXE_INC = \
+    -I../sonicFoam \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/thermophysicalModels/basic/lnInclude \
+    -I$(LIB_SRC)/turbulenceModels/RAS \
+    -I$(LIBOPENFOAMTURBOHOME)/finiteVolume/cfdTools/general/SRFZones
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lmeshTools \
+    -lcompressibleRASModels \
+    -lbasicThermophysicalModels \
+    -lspecie \
+    -L$(FOAM_USER_LIBBIN) -lOpenFoamTurbo

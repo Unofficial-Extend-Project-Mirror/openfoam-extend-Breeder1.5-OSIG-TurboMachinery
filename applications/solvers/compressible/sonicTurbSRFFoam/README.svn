@@ -1,0 +1,16 @@
+Description
+===========
+
+This is a transient compresssible solver for the RELATIVE, trans-
+sonic/supersonic, turbulent flow of a compressible gas within multiple
+rotating frames. This solver is based on the standard OpenFOAM solver
+sonicTurbFoam.
+
+Content:
+================
+
+sonicTurbSRFFoam
+
+Maintainers
+===========
+Oliver Borm
