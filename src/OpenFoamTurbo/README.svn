@@ -13,6 +13,7 @@ Library content:
 - rotatingPressureDirectedInletVelocity : Contribution from Oliver Borm : Temporarily disabled from the compilation.
 - rotatingSplitVelocity                 : Contribution from Oliver Borm : Temporarily disabled from the compilation.
 - rotatingTotalTemperature              : Contribution from Oliver Borm : Temporarily disabled from the compilation.
+- SRFZones                              : Contribution from Oliver Borm
 
 
 Maintainers
