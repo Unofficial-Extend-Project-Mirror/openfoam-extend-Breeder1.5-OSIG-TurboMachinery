@@ -1,0 +1,47 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      thermophysicalProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// Standard Thermophysical model
+thermoType      hThermo<pureMixture<constTransport<specieThermo<hConstThermo<perfectGas>>>>>;
+
+mixture                // keyword
+air 1 28.9             // specie, molar mass
+    1004.5 2.544e+06   // hConstThermo - c_p and Hf (heat of fusion)
+    1.71e-05 0.7;      // constTransport - mu and Pr=c_p mu / kappa
+
+//
+//********************************************************
+//
+
+/*
+// Alternative Model
+thermoType      hThermo<pureMixture<sutherlandTransport<specieThermo<janafThermo<perfectGas>>>>>;
+mixture             // keyword
+air 1 28.9          // specie, molar mass
+// --- begin janafThermo
+// Data obtained from (2009-05-13): http://garfield.chem.elte.hu/Burcat/THERM.DAT
+// Nasa 7-digit / Janaf format, see: NASA TM-4513 (ntrs.nasa.gov), page 15
+    200 6000 1000      // lower Temperature, higher Temperature, common Temperature
+    3.08792717E+00 1.24597184E-03 -4.23718945E-07  6.74774789E-11 -3.97076972E-15 // a_(i = 1,5) for higher temperature
+   -9.95262755E+02 5.95960930E+00  3.56839620E+00 -6.78729429E-04  1.55371476E-06 // b_(i = 1,2) for higher temperature a_i(i = 1,3) for lower temperature
+   -3.29937060E-12 -4.66395387E-13 -1.06234659E+03 3.71582965E+00 // a_i (i = 4,5) b_(i = 1,2) for lower temperature
+// --- end janafThermo
+    1.4792e-06 116  // sutherlandTransport (Star-CD)
+//     1.0515712281065748e-06 110  // sutherlandTransport (numeca) As = mu_{inf}*(1+T_s/T_{inf})/sqrt(T_{inf}), with T_s = 110K, T_{inf} = 293K and mu_{inf}=1.8e-5 Pa*s
+;
+*/
+
+// ************************************************************************* //

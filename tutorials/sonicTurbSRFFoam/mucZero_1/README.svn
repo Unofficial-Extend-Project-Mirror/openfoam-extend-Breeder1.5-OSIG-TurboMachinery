@@ -1,0 +1,33 @@
+Description
+===========
+
+This is a tutorial for sonicTurbSRFFoam solver. It consists of two zones.
+The rotor zone should rotate with a fixed angular velocity Omega=950 1/s.
+The rotor and stator have 3 double-wedge blades each.
+
+As the mixingPlane does not work yet for compressible solvers, the two zones
+are not connected in any way at the moment.
+
+The inlet values for the rotor are at timestep 0:
+  p - zeroGradient
+  T - fixedValue
+  Wxyz - rotatingSplitVelocity (fixed relative velocity)
+
+If appropriate you can change these BC's after timestep 0.05 to:
+  p - rotatingTotalPressure
+  T - rotatingTotalTemperature
+  Wxyz - rotatingPressureDirectedInletVelocity
+These BC's are already commented in timestep 0.
+
+Furthermore you can also change the thermophysicalProperties from the
+"Standard Model" with constant values, to the "Alternative Model" with
+temperature dependend values (Sutherland law and JANAF polynoms)
+
+Content:
+================
+
+mucZero tutorial
+
+Maintainers
+===========
+Oliver Borm
