@@ -110,7 +110,7 @@ const TypeEnum string_to_turboCSVEnum(std::string s_field, TypeContainerXlate ma
     // Default value
     TypeEnum retValue = TypeEnum(0);
 
-    class TypeContainerXlate::iterator p_m_string_to_turboCSVEnum;
+    typename TypeContainerXlate::iterator p_m_string_to_turboCSVEnum;
 
     p_m_string_to_turboCSVEnum = mapXlateValues.find( toLower(s_field));
 
