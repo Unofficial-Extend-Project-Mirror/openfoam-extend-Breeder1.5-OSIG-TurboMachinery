@@ -82,20 +82,16 @@ int main(int argc, char *argv[])
 
         solve(WxyzEqn == -fvc::grad(p));
 
-{
-        fvScalarMatrix hEqn
+        solve
         (
             fvm::ddt(rho, h)
           + fvm::div(phi, h)
           - fvm::laplacian(turbulence->alphaEff(), h)
+         ==
+            DpDt
         );
 
-        srfZones.addCentrifugal(hEqn);
-
-        solve(hEqn == DpDt);
-
         thermo->correct();
-}
 
         // --- PISO loop
 
