@@ -380,8 +380,8 @@ public:
 	GridConnectivity1to1_t writeGridConnectivity1to1( const string& connecname, const string& donorname,
 							const vector<int>& range, const vector<int>& donorrange, const vector<int>& transform );
 	// same method using ranges as arguments
-	GridConnectivity1to1_t readGridConnectivity1to1( int index, string& connecname, string& donorname, range& range, range& donorrange, vector<int>& transform ) const;
-	GridConnectivity1to1_t writeGridConnectivity1to1( const string& connecname, const string& donorname, const range& range, const range& donorrange, const vector<int>& transform );
+	GridConnectivity1to1_t readGridConnectivity1to1( int index, string& connecname, string& donorname, range& r, range& donorrange, vector<int>& transform ) const;
+	GridConnectivity1to1_t writeGridConnectivity1to1( const string& connecname, const string& donorname, const range& r, const range& donorrange, const vector<int>& transform );
 
 	// general connectivity
 	int     	       getNbGridConnectivity() const;

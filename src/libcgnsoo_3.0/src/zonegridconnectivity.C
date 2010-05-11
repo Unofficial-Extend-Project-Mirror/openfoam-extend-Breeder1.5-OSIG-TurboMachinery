@@ -99,10 +99,10 @@ GridConnectivity1to1_t ZoneGridConnectivity_t::writeGridConnectivity1to1(
 
 GridConnectivity1to1_t ZoneGridConnectivity_t::writeGridConnectivity1to1( 
 	const string& connecname, const string& donorname,
-	const range& range, const range& donorrange, const vector<int>& transform )
+	const range& r, const range& donorrange, const vector<int>& transform )
 {
 	int gc11;
-	Array<int> arange(range);
+	Array<int> arange(r);
 	Array<int> adrange(donorrange);
 	Array<int> atransf(transform);
 	int ier = cg_1to1_write( getFileID(), getBase().getID(), getZone().getID(),
