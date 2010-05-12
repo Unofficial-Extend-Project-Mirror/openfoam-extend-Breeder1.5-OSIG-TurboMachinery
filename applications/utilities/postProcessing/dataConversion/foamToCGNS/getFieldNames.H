@@ -88,12 +88,34 @@ Authors
 		}
 	}
 
-	volScalarNames   = volScalarHash.toc();
-	volVectorNames   = volVectorHash.toc();
-	surfScalarNames  = surfScalarHash.toc();
-	surfVectorNames  = surfVectorHash.toc();
-	sprayScalarNames = sprayScalarHash.toc();
-	sprayVectorNames = sprayVectorHash.toc();
+        // Not great, but this will work with either the old or new
+	// implementations of HashSet under OpenFOAM-1.5-dev.
+	// MB 05/2010
+	List<word> volScalarHashToc   = volScalarHash.toc();
+	List<word> volVectorHashToc   = volVectorHash.toc();
+	List<word> surfScalarHashToc  = surfScalarHash.toc();
+	List<word> surfVectorHashToc  = surfVectorHash.toc();
+	List<word> sprayScalarHashToc = sprayScalarHash.toc();
+	List<word> sprayVectorHashToc = sprayVectorHash.toc();
+
+	volScalarNames   = HashSet<word>(volScalarHashToc);
+	volVectorNames   = HashSet<word>(volVectorHashToc);
+	surfScalarNames  = HashSet<word>(surfScalarHashToc);
+	surfVectorNames  = HashSet<word>(surfVectorHashToc);
+	sprayScalarNames = HashSet<word>(sprayScalarHashToc);
+	sprayVectorNames = HashSet<word>(sprayVectorHashToc);
+
+#if 0
+	// For OpenFOAM 1.6-dev, we should use this instead
+	// MB 05/2010
+	volScalarNames   = HashSet<word>(volScalarHash.toc());
+	volVectorNames   = HashSet<word>(volVectorHash.toc());
+	surfScalarNames  = HashSet<word>(surfScalarHash.toc());
+	surfVectorNames  = HashSet<word>(surfVectorHash.toc());
+	sprayScalarNames = HashSet<word>(sprayScalarHash.toc());
+	sprayVectorNames = HashSet<word>(sprayVectorHash.toc());
+#endif
+
 }
 //Info << "volScalarNames  : " << volScalarNames << endl;
 //Info << "volVectorNames  : " << volVectorNames << endl;
