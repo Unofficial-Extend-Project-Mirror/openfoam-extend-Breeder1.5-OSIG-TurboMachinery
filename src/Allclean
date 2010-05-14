@@ -3,3 +3,4 @@
 (cd OpenFoamTurbo; wclean; wcleanLnIncludeAll)
 (cd ./cgnslib_2.5;   make clean; rm -rf ./platforms ./LINUX)
 (cd ./libcgnsoo_3.0; make clean; rm -rf ./platforms ./autom4te.cache)
+(cd ./turboPerformance; wclean; wcleanLnIncludeAll)

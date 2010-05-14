@@ -52,4 +52,8 @@ then
     popd
 fi
 
+#
+# Compile libturboPerformance
+#
+wmake libso turboPerformance
 
