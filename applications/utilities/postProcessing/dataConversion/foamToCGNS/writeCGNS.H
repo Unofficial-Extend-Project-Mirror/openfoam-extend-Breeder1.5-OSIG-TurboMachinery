@@ -448,6 +448,7 @@ if ( patches.size() > 0 )
 	CGNSOO::ZoneBC_t cgnsZoneBC = cgnsZone.writeZoneBC();
 	forAll(patches, patchI)
 	{
+                int noPatch = patchI+1;
 		const polyPatch& pp = patches[patchI];
 #if defined _WRITECGNS_DEBUG_INFO
 		Info << "------------------------" << endl;
@@ -459,7 +460,15 @@ if ( patches.size() > 0 )
 		Info << "Patch is coupled   : " <<  (pp.coupled()?"True":"False") << endl;
 		//	Info << "Patch.boundaryPoints : " << pp.boundaryPoints() << endl;
 #endif
-		
+
+                if(pp.nPoints() == 0)
+                {
+                    Info << noPatch <<
+                        " --> Warning: Patch name: " << pp.name()
+                        << " : This patch has zero points. Skipping." << endl;
+                }
+                else
+                {
 #if defined EXPORT_CYCLIC_BOUNDARIES
 		if ( pp.type()==cyclicPolyPatch::typeName )
 		{
@@ -495,7 +504,8 @@ if ( patches.size() > 0 )
 			std::string  donorzonename = zoneName;
 			CGNSOO::ZoneType_t donorzonetype = CGNSOO::Unstructured;
 			CGNSOO::PointSetType_t donorpsettype = CGNSOO::PointListDonor;
-			
+
+                        Info << noPatch << " : Writing cyclic reference patch: " << refname << endl;
 			CGNSOO::GridConnectivity_t gconnecref = zgconnec.writeGridConnectivity(
 				refname,
 				loc, 
@@ -507,6 +517,8 @@ if ( patches.size() > 0 )
 				donorzonetype, 
 				donorpsettype,
 				perpoints);
+
+                        Info << noPatch << " : Writing cyclic periodic patch: " << pername << endl;
 			CGNSOO::GridConnectivity_t gconnecper = zgconnec.writeGridConnectivity(
 				pername,
 				loc, 
@@ -548,10 +560,14 @@ if ( patches.size() > 0 )
 					refpoints[i] = bc_points_index[i];
 					perpoints[i] = bc_points_index[i+ncyclicpoints];
 				}
+
+                                Info << noPatch << " : Writing cyclic patch: " << pp.name()+"_1" << endl;
 				cgnsZoneBC.writeBC( pp.name()+"_1", 
 						string_OpenFoam_to_CGNSBcType(pt), 
 						CGNSOO::PointList, 
 						refpoints );
+
+                                Info << noPatch << " : Writing cyclic patch: " << pp.name()+"_2" << endl;
 				cgnsZoneBC.writeBC( pp.name()+"_2", 
 						string_OpenFoam_to_CGNSBcType(pt), 
 						CGNSOO::PointList, 
@@ -570,13 +586,16 @@ if ( patches.size() > 0 )
 				bc_points_index[pipI] = patch_index_points[pipI] + 1;  // Indices start at in CGNS
 			}
 			word pt = pp.physicalType();
+
+                        Info << noPatch << " : Writing patch: " << pp.name() << endl;
 			cgnsZoneBC.writeBC( pp.name(), 
 					string_OpenFoam_to_CGNSBcType(pt), 
 					CGNSOO::PointList, 
 					bc_points_index );
 #if defined EXPORT_CYCLIC_BOUNDARIES
 		}
-#endif		
+#endif	
+                }	
 	}
 }
 
