@@ -1,0 +1,37 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object     initializationProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+// This is used by initializeRotation
+// It adds a rotating velocity field to the domain according to
+// the following rule:
+// if( radius < refRadius ):
+//    U = omega x CellCenter
+// else:
+//    U = (omega x CellCenter) * ( refRadius/radius )^(12)
+// 
+// In words: Add solid body rotation within refRadius - which should be set
+// as something a bit less than the radius of the tip of the pump blade - 
+// and quickly decay the tangential velocity from there on to avoid putting
+// a ridiculous amount of energy into the system. Really simple, really
+// useful. Omega doesn't have to be the actual rotational velocity used in
+// the computation. Something a bit less works well.
+
+ omega     omega  [0 0 -1 0 0 0 0]  (0 0 -120.0);
+ origin        origin    [0 1 0 0 0 0 0]    (0 0 0);
+
+ refRadius refRadius [0 1 0 0 0 0 0] 0.12;
+
+// ************************************************************************* //

@@ -1,0 +1,19 @@
+#!/bin/sh
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication setSet -batch setBatch
+runApplication setsToZones -noFlipMap
+
+# Copy MRFSimpleFOAM system files from storage
+cp system/MRFSimpleFoamSettings/* system/.
+
+# To begin from stratch
+cp -r Orig.0 0
+
+# This step is not necessary, but helps convergence
+application="initializeRotation"
+runApplication $application
+
+application="MRFSimpleFoam"
+runApplication $application
+

@@ -1,0 +1,25 @@
+#!/bin/sh
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication setSet -batch setBatch
+runApplication setsToZones -noFlipMap
+
+# Copy transientSimpleDyMFoam system files from storage
+cp system/transientSimpleDyMFoamSettings/* system/.
+
+# (1) To begin from stratch
+# (initializeRotation is not necessary, but helps convergence)
+#cp -r Orig.0_transientSimpleDyMFoam 0
+#application="initializeRotation"
+#runApplication $application
+
+# (2) To begin from pre-computed MRFSimpleFoam solution
+#cp -r transientSimpleDyMFoam.0 0
+
+# (3) To begin from pre-computed transient solution
+cp -r transientSimpleDyMFoam.1 0
+
+
+application="transientSimpleDyMFoam"
+runApplication $application
+

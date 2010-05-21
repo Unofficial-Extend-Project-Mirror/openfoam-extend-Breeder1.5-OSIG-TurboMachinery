@@ -1,0 +1,12 @@
+This directory contains a full case set-up named 'Pump'.
+
+The initializeRotation utility is otionally used in the case set-up.
+
+Find library turboPerformance in:
+Breeder_1.5/OSIG/TurboMachinery/src/turboPerformance/
+
+Find solver transientSimpleDyMFoam in:
+Breeder_1.5/OSIG/TurboMachinery/applications/solvers/incompressible
+Note that this solver has moved the calculation of the turbulence inside
+the SIMPLE loop to avoid oscillations. Please check, in case that someone
+has moved it outside in the revision you have.

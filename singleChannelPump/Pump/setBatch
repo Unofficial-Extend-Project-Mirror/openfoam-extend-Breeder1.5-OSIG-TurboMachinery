@@ -1,0 +1,3 @@
+faceSet insideZone new patchToFace insideGGI
+faceSet outsideZone new patchToFace outsideGGI
+quit

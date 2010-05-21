@@ -11,6 +11,11 @@ Structure
 The folder "ercoftacConicalDiffuser" contains a list of case studies based on
 the ERCOFTAC Conical Diffuser.
 
+The folder "ercoftacCentrifugalPump" contains a list of case studies based on
+the ERCOFTAC Centrifugal Pump.
+
+The folder "singleChannelPump" contains a case study provided by Mikko Auvinen.
+
 The folder "applications" contains new applications.
 
 The folder "src" contains new libraries.

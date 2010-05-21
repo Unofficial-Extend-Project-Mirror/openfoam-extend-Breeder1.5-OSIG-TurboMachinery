@@ -1,0 +1,107 @@
+For the OpenFOAM Community,
+
+This single-channel pump case is distributed to the OpenFOAM community under
+the terms of the GNU General Public License as published by the Free
+Software Foundation; either version 2 of the License, or (at your option)
+any later version. The case is a result of a collaboration between Aalto
+University and Grundfos A/S. It was created and analyzed as a part of a
+larger project which was partially funded by TEKES, The Finnish Funding
+Agency for Technology and Innovation. The distribution is carried out by
+the OpenFOAM Turbomachinery Working Group.
+
+The case has already been fully set up for MRFSimpleFoam and
+transientSimpleDyMFoam analysis. It has been tested with
+OpenFOAM-1.5-dev, revisions 1300 and up. 
+
+To perform MRFSimpleFoam analysis run script: 
+  Allrun.MRFSimpleFoam
+
+To perform transientSimpleDyMFoam analysis run the script:
+  Allrun.transientSimpleDyMFoam
+By default this will start from an already developed solution, but you
+can follow the instructions in the script to start from scratch or
+from a steady-state solution.
+
+To remove time directories and return to the initial state, run script:
+  Allclean
+
+This case is provided for the community to do further experimenting with the
+GGI, different solvers, solver settings, schemes and ... well, anything
+and everything you can come up with. 
+
+With gratitude to the whole community,
+
+Mikko Auvinen
+Department of Applied Mechanics, Fluid Mechanics, Aalto University /
+Structural & Fluid Mechanics, R&T, Grundfos Management A/S
+
+Nicholas Pedersen and Kristian Dahl
+Structural & Fluid Mechanics, R&T, Grundfos Management A/S
+
+Hakan Nilsson (On behalf of the OpenFOAM Turbomachinery Working Group)
+Applied mechanics, Fluid Dynamics, Chalmers University of Technology
+
+
+= = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = 
+Additional Info.
+
+The computational case was part of a study which is reported in the following
+conference paper:
+
+@inproceedings{AuvinenEccomas2010,
+Author = "Auvinen, M., Ala-Juusela, J., Pedersen, N., Siikonen, T.",
+Title  = "Time-Accurate Turbomachinery Simulations with Open-Source CFD;
+Flow Analysis of a Single-Channel Pump with OpenFOAM",
+BookTitle="V European Conference on Computational Fluid Dynamics, ECCOMAS
+CFD 2010",
+Address= "Lisbon, Portugal",
+Month  = "June",
+Year   = 2010}
+
+You should be able to replicate the reported performance results for the
+'Coarse SST' and 'Coarse k-epsilon' (if you change to RASModel kEpsilon
+in constant/RASProperties) cases. If you wish to replicate the velocity
+profile animations - without the experimental LDV data - you can use the
+provided sampleDict to extract the profiles. To obtain a good temporal
+resolution for the animations, a total of 90 saved solution states is required
+(see purgeWrite 90; in system/transientSimpleDyMFoamSettings/controlDict). 
+
+Other included files (mapFieldsDict, decomposeParDict etc.) are not
+necessary, but left in place in case they become useful. 
+
+- - - - 
+
+The following solution files are provided for convenience:
+
+Orig.0/
+Clean solution files for starting from scratch (for example,
+with MRFSimpleFoam). See Allrun.MRFSimpleFoam and Allrun.transientSimpleDyMFoam.
+
+transientSimpleDyMFoam.0/
+A result from MRFSimpleFoam analysis to be used as an
+initial guess for the transient analysis. It is obtained by starting with Orig.0
+and running first initializeRotation and then MRFSimpleFoam (with the
+ MRFSimpleFoam settings).
+The impellerWall boundary condition type has already been changed from
+fixedValue to movingWallVelocity for the purpose of dynamic mesh transient
+simulations. See Allrun.transientSimpleDyMFoam.
+
+transientSimpleDyMFoam.1/
+An intermediate result from a complete time-accurate
+analysis. Good starting point for transient tests cases. See
+Allrun.transientSimpleDyMFoam.
+
+ - - - - 
+
+In addition to OpenFOAM-1.5-dev, you need the following:
+* turboPerformance 
+(see the Turbomachinery WG Wiki)
+
+* initializeRotation 
+(compile: wmake. This is not really needed, but it's a helpful
+initialization tool, which improves convergence and computational robustness
+in rotating machinery cases.)
+
+* transientSimpleDyMFoam 
+(see the Turbomachinery WG Wiki)
+

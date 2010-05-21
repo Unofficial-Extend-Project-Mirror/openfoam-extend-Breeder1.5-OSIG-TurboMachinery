@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.4.1                                 |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version 2.0;
+    format binary;
+
+    root "/wrk6/mauvinen/wrkOpenFOAM/caseStorage";
+    case "tubePumpWF";
+    instance "0";
+    local "";
+
+    class volVectorField;
+    object U;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    impellerWall
+    {
+        type            movingWallVelocity;
+        value           uniform (0 0 0);
+    }
+    inletDuct
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    inlet
+    {
+        type            fixedValue;
+        value           uniform (0 0 3.407);
+    }
+    impellerRim
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    voluteWall
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    outletDuct
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    outlet
+    {
+        type            zeroGradient;
+    }
+
+   insideGGI
+  {
+         type        ggi;
+  }
+  outsideGGI
+  {
+         type        ggi;
+  }
+}
+
+
+// ************************************************************************* //

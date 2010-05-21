@@ -1,0 +1,112 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.3                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+
+    p GAMG
+    {
+        tolerance      1.0e-6;
+        relTol           1.e-3;
+
+        smoother         DIC;//GaussSeidel;
+        nPreSweeps       0;
+        nPostSweeps      2;
+
+        cacheAgglomeration true;
+
+        nCellsInCoarsestLevel 800;
+        agglomerator     faceAreaPair;
+        mergeLevels      1;
+        maxIter            30;
+    };
+
+    U PBiCG
+    {
+        preconditioner
+        { type         DILU;}
+
+        smoother
+        { type         DILU;}	
+
+        minIter          1;
+        maxIter          4;
+        tolerance        1e-07;
+        relTol           0;
+    };
+
+    k PBiCG
+    {
+        preconditioner
+        { type         DILU;}
+
+        smoother
+        { type         DILU;}
+
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+
+    epsilon PBiCG
+    {
+        preconditioner
+        { type         DILU;}
+
+        smoother
+        { type         DILU;}
+
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+
+    omega PBiCG
+    {
+        preconditioner
+        { type         DILU;}
+
+        smoother
+        { type         DILU;}
+
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+}
+
+
+SIMPLE
+{
+    nNonOrthogonalCorrectors 1;
+}
+
+relaxationFactors
+{
+    p               0.3;
+    U               0.77;
+    k               0.6;
+    epsilon         0.6;
+    omega           0.6;
+}
+
+
+// ************************************************************************* //

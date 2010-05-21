@@ -1,0 +1,88 @@
+FoamFile
+{
+ version 2.0;
+ format ascii;
+
+ root "OpenFoamFilesrun/tutorials/icoFoam";
+ case "cylinderEulerFromGridPro_fine";
+ instance ""constant"";
+ local "PolyMesh";
+
+ class polyBoundaryMesh;
+ object boundary;
+}
+
+9
+(
+impellerWall
+{
+  type wall;
+  nFaces 12184;
+  startFace 1333188;
+}
+
+
+inletDuct
+{
+  type wall;
+  nFaces 672;
+  startFace 1351052;
+}
+
+inlet
+{
+  type patch;
+  nFaces 640;
+  startFace 1351724;
+}
+
+impellerRim
+{
+  type wall;
+  nFaces 2840;
+  startFace 1352364;
+}
+
+voluteWall
+{
+  type wall;
+  nFaces 11976;
+  startFace 1355204;
+}
+
+outletDuct
+{
+  type wall;
+  nFaces 2688;
+  startFace 1367180;
+}
+
+outlet
+{
+  type patch;
+  nFaces 1344;
+  startFace 1369868;
+}
+
+insideGGI
+{
+  type ggi;
+  nFaces 5680;
+  startFace 1345372;
+  shadowPatch     outsideGGI;
+  zone            insideZone;
+  bridgeOverlap   false; 
+}
+
+outsideGGI
+{
+  type ggi;
+  nFaces 5680;
+  startFace 1371212;        
+  shadowPatch     insideGGI;
+  zone            outsideZone;
+  bridgeOverlap   false;
+}
+
+)
+
