@@ -70,7 +70,7 @@ functions
    turboPerformance
    {
       type turboPerformance;
-      functionObjectLibs ("libperformance.so");
+      functionObjectLibs ("libturboPerformance.so");
       inletPatches (inlet);
       outletPatches (outlet);
       patches (impellerWall);
