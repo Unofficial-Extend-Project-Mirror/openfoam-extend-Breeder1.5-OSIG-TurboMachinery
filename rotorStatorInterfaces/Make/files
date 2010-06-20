@@ -4,7 +4,7 @@
 primitiveRotationalPatch = primitiveRotationalPatch
 $(primitiveRotationalPatch)/primitiveRotationalPatch.C
 
-mixingPlane =  mixingPlane
+mixingPlane =  mixingPlaneImprovement
 
 primitiveMixingPlanePatch = $(mixingPlane)/primitiveMixingPlanePatch
 $(primitiveMixingPlanePatch)/primitiveMixingPlanePatch.C
