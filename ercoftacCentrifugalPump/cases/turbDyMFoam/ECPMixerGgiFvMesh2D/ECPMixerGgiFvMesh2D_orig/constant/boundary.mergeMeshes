@@ -1,0 +1,70 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5-dev                               |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "1/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+7
+(
+    GGI_INT
+    {
+        type            ggi;
+        nFaces          707;
+        startFace       374119;
+	shadowPatch	GGI_EXT;
+	bridgeOverlap	true;
+	zone		GGI_INT_ZONE;
+    }
+    INLET
+    {
+        type            patch;
+        nFaces          434;
+        startFace       184170;
+    }
+    BLADE_ROT
+    {
+        type            wall;
+        nFaces          1743;
+        startFace       184604;
+    }
+    HUB_SHROUD
+    {
+        type            empty;
+        nFaces          187772;
+        startFace       186347;
+    }
+    GGI_EXT
+    {
+        type            ggi;
+        nFaces          756;
+        startFace       374826;
+	shadowPatch	GGI_INT;
+	bridgeOverlap	true;
+	zone		GGI_EXT_ZONE;
+    }
+    OUTLET
+    {
+        type            patch;
+        nFaces          804;
+        startFace       375582;
+    }
+    BLADE_STAT
+    {
+        type            wall;
+        nFaces          2760;
+        startFace       376386;
+    }
+)
+
+// ************************************************************************* //

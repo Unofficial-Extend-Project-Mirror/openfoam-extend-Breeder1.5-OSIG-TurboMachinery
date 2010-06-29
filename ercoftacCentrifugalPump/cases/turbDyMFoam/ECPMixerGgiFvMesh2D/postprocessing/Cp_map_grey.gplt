@@ -1,0 +1,52 @@
+set term png
+set output 'Cp_map_2_backward_299723_grey.png'
+
+set   autoscale                        # scale axes automatically
+unset log                              # remove any log-scaling
+unset label                            # remove any previous labels
+set xtic auto                          # set xtics automatically
+set ytic auto                          # set ytics automatically
+
+set view map
+unset surface
+set style data pm3d
+set style function pm3d
+
+set xrange [-0.2:0.25]
+set yrange [-0.1:0.25]
+set cbrange [-0.08:0.72]
+set cbtics -0.08,.08,0.72
+set size 1,1 
+set tmargin at screen 0.90
+set bmargin at screen 0.10
+set lmargin at screen 0.01
+set rmargin at screen 0.85
+#set key font "Helvetica" 40
+#set key tmargin right title "case1-0 result(t/Ti=0.2)"
+
+set key tmargin right title "2DBackL0.5T (t/Ti=0.2)"
+
+unset grid
+unset xlabel
+unset ylabel
+unset border
+unset xtics
+unset ytics
+#set angles degrees
+
+set pm3d implicit at b
+set pm3d scansforward
+set pm3d interpolate 10,50 flush begin ftriangles nohidden3d corners2color mean
+
+set palette defined (0.0 0 0 0, 0.1 0 0 0, 0.1 0.2 0.2 0.2, 0.2 0.2 0.2 0.2, 0.2 0.4 0.4 0.4, 0.3 0.4 0.4 0.4, 0.3 0.5 0.5 0.5, 0.4 0.5 0.5 0.5, 0.4 0.55 0.55 0.55, 0.5 0.55 0.55 0.55, 0.5 0.6 0.6 0.6, 0.6 0.6 0.6 0.6, 0.6 0.7 0.7 0.7, 0.7 0.7 0.7 0.7, 0.7 0.9 0.9 0.9, 0.8 0.9 0.9 0.9, 0.8 0.4 0.4 0.4, 0.9 0.4 0.4 0.4, 0.9 0.2 0.2 0.2,1.0 0.2 0.2 0.2)
+
+rBladeTip=0.210 # [m], impellet blade tip radius
+rMes=0.2142     # [m], measurement position
+
+omega=-2000*2.*pi/60. # -2000RPM : [rad/s]
+U2=-omega*rBladeTip  # [m/s]
+P0=-700
+
+set colorbox
+
+splot './postProcessing_data_unsteady_Cp_auto_all_0.299723' u (column(2)):(column(1)):(2*(column(5)-P0)/(U2*U2)) w pm3d

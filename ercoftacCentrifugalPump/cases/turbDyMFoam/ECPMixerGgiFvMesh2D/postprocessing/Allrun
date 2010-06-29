@@ -1,0 +1,136 @@
+#!/bin/bash
+
+time=0.295711;
+
+
+###--------postprocessing----###
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+###--------sampling---------###
+
+sample -case .. -time ${time}
+cp ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+
+
+time=0.296513;
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+sample -case .. -time ${time}
+cp ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+
+
+time=0.298118;
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+sample -case .. -time ${time}
+cp ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+
+
+time=0.298921;
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+sample -case .. -time ${time}
+cp ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+
+
+time=0.299322;
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+sample -case .. -time ${time}
+cp ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+
+###----------------gnuplot---------------###
+gnuplot call_backward_linearUpwind.gplt
+
+
+time=0.299723;
+
+###--------postprocessing----###
+
+foamCalc mag U -case .. -time ${time}
+foamCalc components U -case .. -time ${time}
+
+###--------sampling---------###
+
+###--------part1----------###
+cp ../system/sampleDict_part1 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline > postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part2-----------###
+cp ../system/sampleDict_part2 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part3-----------###
+cp ../system/sampleDict_part3 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part4-----------###
+cp ../system/sampleDict_part4 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part5-----------###
+cp ../system/sampleDict_part5 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part6-----------###
+cp ../system/sampleDict_part6 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part7-----------###
+cp ../system/sampleDict_part7 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part8-----------###
+cp ../system/sampleDict_part8 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part9-----------###
+cp ../system/sampleDict_part9 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+
+###--------part10-----------###
+cp ../system/sampleDict_part10 ../system/sampleDict
+sample -case .. -time ${time}
+
+cat ../sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy >> postProcessing_data_unsteady_Cp_auto_all_${time}
+cp ../system/sampleDict_orig ../system/sampleDict
+
+###----------gnuplot--------###
+gnuplot Cp_map_color.gplt Cp_map_grey.gplt
+
+
+firefox file://$PWD/compareAll.html

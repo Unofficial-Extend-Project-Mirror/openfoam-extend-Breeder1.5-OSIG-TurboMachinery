@@ -1,0 +1,99 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      controlDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     turbDyMFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         0.3;
+
+deltaT          0.0000001;
+
+writeControl    timeStep;
+
+writeInterval   50;
+
+cycleWrite      0;
+
+purgeWrite      5;
+
+writeFormat     ascii;
+
+writePrecision  8;
+
+writeCompression compressed;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep yes;
+
+maxCo          0.5;
+
+maxDeltaT      1.0;
+
+functions
+(
+
+   ggiCheck
+    {
+        // Type of functionObject
+        type ggiCheck;
+
+        phi phi;
+
+        // Where to load it from (if not already in solver)
+        functionObjectLibs ("libsampling.so");
+    }
+
+/*
+    probes
+    {
+        type            probes;
+        functionObjectLibs ("libsampling.so");
+        enabled         true;
+        outputControl   timeStep;
+        outputInterval  1;
+        probeLocations
+        (
+            (0.121 0 0)
+            (0.13 0 0)
+            (0.2142 0 0)
+            (0.31 0 0)
+            (0.32 0 0)
+        );
+
+        fields
+        (
+            p
+        );
+    }
+*/
+
+);
+
+
+libs ("libOpenFOAM.so" "libOpenFoamTurbo.so");
+// ************************************************************************* //

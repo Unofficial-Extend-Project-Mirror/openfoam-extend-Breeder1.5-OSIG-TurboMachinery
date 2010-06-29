@@ -1,0 +1,57 @@
+reset
+
+#  $0: starting angle
+#  $1: measurement data sheet, that varies according to the four positions of the rotor.
+#  $2: unsteady simulation data
+#  $3: unsteady simulation choosen time
+#  $4: angles adjustment 
+#  $5: impeller/diffuser position 
+
+pause 0 "arg0 : $0"
+pause 0 "arg1 : $1"
+pause 0 "arg2 : $2"
+pause 0 "arg3 : $3"
+pause 0 "arg4 : $4"
+pause 0 "arg5 : $5"
+
+set term png
+
+set   autoscale                        # scale axes automatically
+unset log                              # remove any log-scaling
+unset label                            # remove any previous labels
+set xtic auto                          # set xtics automatically
+set ytic auto                          # set ytics automatically
+
+
+rBladeTip=0.210 # [m], impellet blade tip radius
+rMes=0.2142     # [m], measurement position
+
+omega=-2000*2.*pi/60. # -2000RPM : [rad/s]
+U2=-omega*rBladeTip  # [m/s]
+Vmes=omega*rMes     # [m/s]
+P0=-700
+
+set key tmargin
+
+set output 'Cp_$0_backward_linearUpwind.png'
+#set title "Cp(time=$3)"
+
+set xlabel "Yi/Gi"
+set ylabel "Cp"
+set grid xtics
+set grid ytics
+set size 1,0.9
+set xrange [0:2]
+set yrange [0.2:0.8]
+set tmargin 3.7
+set label "t/Ti=0.$0" at 1.7,0.83 textcolor rgb "black"
+
+
+plot \
+    '$1' u (column(1)==1.01905 ? ((column(2)+4.6)*7./360.) : 1/0):(column(3)) title "experimental" with linespoints pt 6 lw 2,\
+    '$2' u ((-$4+column(11))/(360./7.)):(2*(column(5)-P0)/(U2*U2)) title "2DBackL0.5T" with lines lw 2 lc 3,\
+    '$5' u (column(1)==13 ? column(2) : 1/0):(column(3)) notitle with points pt 11 ps 1.5 linecolor rgb "black",\
+    '$5' u (column(1)==240.$0 ? column(2) : 1/0):(column(3)) notitle with points pt 5 ps 1.5 linecolor rgb "black"
+
+
+

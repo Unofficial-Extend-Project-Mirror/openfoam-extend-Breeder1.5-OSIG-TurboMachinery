@@ -1,0 +1,63 @@
+#!/bin/bash
+
+if [ -d ECPMixerGgiFvMesh2D_orig ] ; then
+     case=ECPMixerGgiFvMesh2D;
+else
+    echo "sorry, you need to have ECPMixerGgiFvMesh2D_orig in the current folder";
+fi
+
+###-------------Saving the datas----------------###
+
+cp -r rotor2D_orig rotor2D	  ### Backup of the initial directories
+cp -r stator2D_orig stator2D 	  ### Those three directories should stay unchanged
+cp -r ${case}_orig ${case}	  ### to allow a reseting of the case
+
+###------- some clean-up-------###
+
+rm -rf rotor2D/.svn
+rm -rf rotor2D/system/.svn
+rm -rf rotor2D/constant/.svn
+rm -rf stator2D/.svn
+rm -rf stator2D/system/.svn
+rm -rf stator2D/constant/.svn
+rm -rf ${case}/.svn
+rm -rf ${case}/0_orig/.svn
+rm -rf ${case}/system/.svn
+rm -rf ${case}/constant/.svn
+rm -rf ${case}/0/.svn
+
+###------------making the mesh---------------###
+
+fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
+fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+
+###------------Create cellSet and cellZone-----------###
+
+cellSet -case rotor2D
+setsToZones -noFlipMap -case rotor2D
+
+###------------Building the case-----------###
+### Creation of the case. Note that in the case should be already a 0_orig/ system/ and constant/ folder ###
+
+cd ${case}
+cp -r 0_orig 0
+cp -r ../rotor2D/constant/polyMesh constant/
+mergeMeshes . . .. stator2D
+rm -r constant/polyMesh
+mv 1e-07/polyMesh constant
+rm -r 1e-07/
+
+### Those steps give you a constant/polyMesh that contains the whole mesh. You still need to put the right definitions by hand to each patches. As it takes some times, a boundary.mergMeshes including the right name is in constant, you just need to call it. ###
+
+rm -r constant/polyMesh/boundary
+cp constant/boundary.mergeMeshes constant/polyMesh/boundary
+
+### Set up GGI zones for parallelization ###
+
+setSet -batch setBatch
+setsToZones -noFlipMap
+
+###-----------launching the computations------###
+
+turbDyMFoam > log 
+

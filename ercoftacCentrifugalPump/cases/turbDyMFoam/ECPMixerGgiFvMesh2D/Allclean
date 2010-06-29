@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ -d ECPMixerGgiFvMesh2D_orig ] ; then
+     case=ECPMixerGgiFvMesh2D;
+else
+    echo "sorry, you need to have ECPStitchMesh2D_orig or ECPGgi2D_orig in the current folder";
+fi
+
+rm -r ${case}
+rm -r rotor2D
+rm -r stator2D

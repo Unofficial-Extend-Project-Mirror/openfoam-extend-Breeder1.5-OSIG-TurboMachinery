@@ -1,0 +1,74 @@
+#-------------------------------------------------------------------------
+#------------------------------------------------------------------------- 
+
+#  $0: starting angle
+#  $1: measurement data sheet, that varies according to the four positions of the rotor.
+#  $2: unsteady simulation data
+#  $3: unsteady simulation choosen time
+#  $4: angles adjustment
+#  $5: impeller and diffuser position 
+
+pause 0 "arg0 : $0"
+pause 0 "arg1 : $1"
+pause 0 "arg2 : $2"
+pause 0 "arg3 : $3"
+pause 0 "arg4 : $4"
+pause 0 "arg5 : $5"
+
+
+UrIn=11.4       # [m/s]
+rIn=0.1         # [m]
+rOut=0.365      # [m]
+rBladeTip=0.210 # [m], impellet blade tip radius
+rMes=0.2142     # [m], measurement position
+
+omega=-2000*2.*pi/60. # -2000RPM : [rad/s]
+U2=-omega*rBladeTip  # [m/s] 
+Vmes=omega*rMes     # [m/s]
+ 
+set   autoscale                        # scale axes automatically
+unset log                              # remove any log-scaling
+unset label                            # remove any previous labels
+set xtic auto                          # set xtics automatically
+set ytic auto                          # set ytics automatically
+
+set size 1,0.9
+set grid xtics
+set grid ytics
+set key tmargin
+
+#Velocity validation:
+
+set term png medium
+set output "Wr_$0_backward_linearUpwind.png"
+#set title "Wr(time=$3)"
+set xlabel "Yi/Gi"
+set ylabel "Wr/U2"
+set xrange [0.0:2.0]
+set yrange [0.0:0.3]
+set angles rad
+set tmargin 3.7
+set label "t/Ti=0.$0" at 1.6,0.315 textcolor rgb "black"
+
+plot \
+    '$1' u (column(2)==0.5 ? column(1) : 1/0):(column(3)) title "experimental" with lines lw 2,\
+    '$2' u ((-$4+column(11))/(360./7.)):(((column(8))*cos(column(11)*pi/180.)+(column(9))*sin(column(11)*pi/180.))/U2) title "2DBackL0.5T" with lines lw 2,\
+    '$5' u (column(1)==14 ? column(2) : 1/0):(column(3)) notitle with points pt 11 ps 1.5 linecolor rgb "black",\
+    '$5' u (column(1)==240.$0 ? column(2) : 1/0):(column(3)) notitle with points pt 5 ps 1.5 linecolor rgb "black"  
+
+#Velocity validation:
+
+set output "Wu_$0_backward_linearUpwind.png"
+#set title "(time=$3)"
+set ylabel "Wu/U2"
+set yrange [-0.9:-0.3]
+unset label
+set label "t/Ti=0.$0" at 1.6,-0.27 textcolor rgb "black"
+
+plot \
+    '$1' u (column(2)==0.5 ? column(1) : 1/0):( -(-column(4) - Vmes/U2) ) title "experimental"  with lines lw 2,\
+    '$2' u ((-$4+column(11))/(360./7.)):( -( (-(column(8))*sin(column(11)*pi/180.)+(column(9))*cos(column(11)*pi/180.)) - Vmes)/U2 ) title "2DBackL0.5T" with lines lw 2,\
+    '$5' u (column(1)==15 ? column(2) : 1/0):(column(3)) notitle with points pt 11 ps 1.5 linecolor rgb "black",\
+    '$5' u (column(1)==220.$0 ? column(2) : 1/0):(column(3)) notitle with points pt 5 ps 1.5 linecolor rgb "black"  
+
+

@@ -1,0 +1,63 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5-dev                               |
+|   \\  /    A nd           | Revision: 1629                                  |
+|    \\/     M anipulation  | Web:      http://www.OpenFOAM.org               |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 138.342;
+
+boundaryField
+{
+    GGI_INT
+    {
+        type            ggi;
+        value           uniform 138.342;
+    }
+    INLET
+    {
+        type            profile1DfixedValue;
+        fileName        "rotor2d_abs.csv";
+        fileFormat      "turboCSV";
+        interpolateCoord "Z";
+        fieldName       "Epsilon";
+        fieldScaleFactor 1;
+        value           uniform 138.342;
+    }
+    BLADE_ROT
+    {
+        type            zeroGradient;
+    }
+    HUB_SHROUD
+    {
+        type            empty;
+    }
+    GGI_EXT
+    {
+        type            ggi;
+        value           uniform 138.342;
+    }
+    OUTLET
+    {
+        type            zeroGradient;
+    }
+    BLADE_STAT
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //

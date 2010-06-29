@@ -1,0 +1,65 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5-dev                               |
+|   \\  /    A nd           | Revision: 1629                                  |
+|    \\/     M anipulation  | Web:      http://www.OpenFOAM.org               |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    GGI_INT
+    {
+        type            ggi;
+        value           uniform (0 0 0);
+    }
+    INLET
+    {
+        type            profile1DfixedValue;
+        fileName        "rotor2d_abs.csv";
+        fileFormat      "turboCSV";
+        interpolateCoord "Z";
+        fieldName       "Velocity";
+        fieldScaleFactor 1;
+        value           uniform (0 0 0);
+    }
+    BLADE_ROT
+    {
+        type            movingWallVelocity;
+        value           uniform (0 0 0);
+    }
+    HUB_SHROUD
+    {
+        type            empty;
+    }
+    GGI_EXT
+    {
+        type            ggi;
+        value           uniform (0 0 0);
+    }
+    OUTLET
+    {
+        type            zeroGradient;
+    }
+    BLADE_STAT
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+}
+
+
+// ************************************************************************* //

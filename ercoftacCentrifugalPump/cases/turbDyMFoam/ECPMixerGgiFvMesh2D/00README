@@ -1,0 +1,11 @@
+####---- HowTo simulate the case ----####
+
+To build the case and start the simulation, type ./Allrun. The simulation results will be written in a log file in ${case}/log
+
+####---- HowTo postProcess the case ----####
+
+In the postProcessing folder, just type ./Allrun, and the postProcessing should be automatic.
+
+
+For more information on this case, check the wiki at the following adress: http://openfoamwiki.net/index.php/Sig_Turbomachienry_/_ERCOFTAC_centrifugal_pump_with_a_vaned_diffuser
+
