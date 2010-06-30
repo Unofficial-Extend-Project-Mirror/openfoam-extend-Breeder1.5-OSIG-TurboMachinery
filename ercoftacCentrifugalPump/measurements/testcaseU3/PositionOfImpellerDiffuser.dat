@@ -1,0 +1,91 @@
+#column(1)=11 Wr impeller position
+#column(1)=12 Wu impeller position
+#column(1)=13 Cp impeller position
+#column(1)=14 Wr comparison of unsteady/steady/experimental impeller position
+#column(1)=15 Wu comparison of unsteady/steady/experimental impeller position
+#column(1)=210.126 Wr diffuser position(t/Ti=0.126)
+#column(1)=210.226 Wr diffuser position(t/Ti=0.226)
+#column(1)=210.326 Wr diffuser position(t/Ti=0.326)
+#column(1)=210.426 Wr diffuser position(t/Ti=0.426)
+#column(1)=220.126 Wu diffuser position(t/Ti=0.126)
+#column(1)=220.226 Wu diffuser position(t/Ti=0.226)
+#column(1)=220.326 Wu diffuser position(t/Ti=0.326)
+#column(1)=220.426 Wu diffuser position(t/Ti=0.426)
+#column(1)=230.0 Cp diffuser position(t/Ti=0.0)
+#column(1)=230.1 Cp diffuser position(t/Ti=0.1)
+#column(1)=230.2 Cp diffuser position(t/Ti=0.2)
+#column(1)=230.3 Cp diffuser position(t/Ti=0.3)
+#column(1)=240.126 Wr comparison of unsteady/steady/experimental diffuser position(t/Ti=0.126)
+#column(1)=240.0 Cp comparison of steady/experimental diffuser position(t/Ti=0.0)
+11 0.3 0.4944
+11 1.3 0.4944
+12 0.3 -0.408
+12 1.3 -0.408
+13 0.3 0.793
+13 1.3 0.793
+14 0.3 0.296
+14 1.3 0.296
+15 0.3 -0.308
+15 1.3 -0.308
+210.126 0.02 0.006
+210.126 0.605 0.006
+210.126 1.19 0.006
+210.126 1.775 0.006
+210.226 0.12 0.01
+210.226 0.705 0.01
+210.226 1.29 0.01
+210.226 1.875 0.01
+210.326 0.214 0.01
+210.326 0.799 0.01
+210.326 1.384 0.01
+210.326 1.969 0.01
+210.426 0.322 0.01
+210.426 0.907 0.01
+210.426 1.492 0.01
+220.126 0.02 -0.89
+220.126 0.6 -0.89
+220.126 1.18 -0.89
+220.126 1.76 -0.89
+220.226 0.12 -0.89
+220.226 0.705 -0.89
+220.226 1.29 -0.89
+220.226 1.875 -0.89
+220.326 0.214 -0.89
+220.326 0.799 -0.89
+220.326 1.384 -0.89
+220.326 1.969 -0.89
+220.426 0.322 -0.89
+220.426 0.907 -0.89
+220.426 1.492 -0.89
+230.0 0.46 0.21
+230.0 1.045 0.21
+230.0 1.63 0.21
+230.1 0.56 0.21
+230.1 1.145 0.21
+230.1 1.73 0.21
+230.2 0.075 0.21
+230.2 0.66 0.21
+230.2 1.245 0.21
+230.2 1.83 0.21
+230.3 0.173 0.21
+230.3 0.758 0.21
+230.3 1.343 0.21
+230.3 1.928 0.21
+240.126 0.02 0.006
+240.126 0.605 0.006
+240.126 1.19 0.006
+240.126 1.775 0.006
+240.226 0.12 0.006
+240.226 0.705 0.006
+240.226 1.29 0.006
+240.226 1.875 0.006
+240.326 0.214 0.006
+240.326 0.799 0.006
+240.326 1.384 0.006
+240.326 1.969 0.006
+240.426 0.322 0.006
+240.426 0.907 0.006
+240.426 1.492 0.006
+240.0 0.46 0.21
+240.0 1.045 0.21
+240.0 1.63 0.21
