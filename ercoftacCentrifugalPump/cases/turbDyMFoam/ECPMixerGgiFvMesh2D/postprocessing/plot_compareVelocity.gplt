@@ -35,7 +35,7 @@ set ytic auto                          # set ytics automatically
 set size 1,0.9
 set grid xtics
 set grid ytics
-set key tmargin
+#set key tmargin
 
 #Velocity validation:
 

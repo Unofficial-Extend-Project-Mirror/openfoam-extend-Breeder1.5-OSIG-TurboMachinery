@@ -1,8 +1,8 @@
-call "plot_compareVelocity.gplt" "126" "../../../measurements/testcaseU3/CRCU0.DAT" "./postProcessing_data_unsteady_0.298118" "0.298118" "180" "../../../measurements/PositionOfImpellerDiffuser.dat"
-call "plot_compareVelocity.gplt" "226" "../../../measurements/testcaseU3/CRCU1.DAT" "./postProcessing_data_unsteady_0.298921" "0.298921" "325" "../../../measurements/PositionOfImpellerDiffuser.dat"
-call "plot_compareVelocity.gplt" "326" "../../../measurements/testcaseU3/CRCU2.DAT" "./postProcessing_data_unsteady_0.299322" "0.299322" "320" "../../../measurements/PositionOfImpellerDiffuser.dat"
-call "plot_compareVelocity.gplt" "426" "../../../measurements/testcaseU3/CRCU3.DAT" "./postProcessing_data_unsteady_0.296513" "0.296513" "45" "../../../measurements/PositionOfImpellerDiffuser.dat"
-call "Cp.gplt" "0" "../../../measurements/testcaseU3/CP0.DAT" "./postProcessing_data_unsteady_0.295711" "0.295711" "91" "../../../measurements/PositionOfImpellerDiffuser.dat"
+call "plot_compareVelocity.gplt" "126" "../../../../measurements/testcaseU3/CRCU0.DAT" "./postProcessing_data_unsteady_0.298118" "0.298118" "180" "../../../../measurements/PositionOfImpellerDiffuser.dat"
+call "plot_compareVelocity.gplt" "226" "../../../../measurements/testcaseU3/CRCU1.DAT" "./postProcessing_data_unsteady_0.298921" "0.298921" "325" "../../../../measurements/PositionOfImpellerDiffuser.dat"
+call "plot_compareVelocity.gplt" "326" "../../../../measurements/testcaseU3/CRCU2.DAT" "./postProcessing_data_unsteady_0.299322" "0.299322" "320" "../../../../measurements/PositionOfImpellerDiffuser.dat"
+call "plot_compareVelocity.gplt" "426" "../../../../measurements/testcaseU3/CRCU3.DAT" "./postProcessing_data_unsteady_0.296513" "0.296513" "45" "../../../../measurements/PositionOfImpellerDiffuser.dat"
+call "Cp.gplt" "0" "../../../../measurements/testcaseU3/CP0.DAT" "./postProcessing_data_unsteady_0.295711" "0.295711" "91" "../../../../measurements/PositionOfImpellerDiffuser.dat"
 call "Cp_map_grey.gplt"
 call "Cp_map_color.gplt"
 
