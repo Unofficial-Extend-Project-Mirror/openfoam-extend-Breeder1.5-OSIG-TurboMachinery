@@ -4,9 +4,6 @@
 
 . $WM_PROJECT_DIR/bin/tools/RunFunctions
 
-# Load additional RunFunctions 
-. ../../tools/RunFunctionsSupplemental
-
 #We stop this script when we encounter a problem
 trap "exit -1" ERR
 
@@ -18,22 +15,37 @@ m4 -P blockMeshDict.m4 > blockMeshDict
 popd >& /dev/null
 
 echo "$caseName: Running blockMesh"
-runApplicationAndReportOnError blockMesh
+runApplication blockMesh
 
 echo "$caseName: Creating the starting time directory"
 cp -r 0_orig 0
 
 echo "$caseName: Running addSwirlAndRotation"
-runApplicationAndReportOnError addSwirlAndRotation
+runApplication addSwirlAndRotation
 
 echo "$caseName: Running simpleFoam"
-runApplicationAndReportOnError simpleFoam
+runApplication simpleFoam
 
 echo "$caseName: Postprocessing"
 cd postProcessing
-runApplicationAndReportOnError sample -case .. -time 1000             
-runApplicationAndReportOnError gnuplot compareAll.gplt    ; mv log.gnuplot log.gnuplotCompareAll   
-runApplicationAndReportOnError foamLog ../log.simpleFoam              
-runApplicationAndReportOnError gnuplot plotResiduals.gplt ; mv log.gnuplot log.gnuplotPlotResiduals
 
+# Find latest time directory
+latestAvailTimeDir=`foamInfoExec -case .. -times | tail -1`
+
+echo "Analysing results for time: $latestAvailTimeDir"
+
+# Run sample
+runApplication sample -case .. -latestTime
+
+# Adjust compareAll.gplt: replace "Case2.2" "??" by "Case2.2" "$latestAvailTimeDir"
+sed -i "s/\"Case2.2\".*$/\"Case2.2\" \"$latestAvailTimeDir\"/g" compareAll.gplt
+
+# Run gnuplot to generate the comparison charts
+runApplication gnuplot compareAll.gplt    ; mv log.gnuplot log.gnuplotCompareAll   
+
+# Run foamLog   
+runApplication foamLog ../log.simpleFoam              
+
+# Run gnuplot for the residuals
+runApplication gnuplot plotResiduals.gplt ; mv log.gnuplot log.gnuplotPlotResiduals
 
