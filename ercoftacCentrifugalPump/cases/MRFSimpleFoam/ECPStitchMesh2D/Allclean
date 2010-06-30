@@ -9,6 +9,6 @@ else
 fi
 
 
-rm -r ${case}
-rm -r rotor2D
-rm -r stator2D
+rm -rf ${case}
+rm -rf rotor2D
+rm -rf stator2D
