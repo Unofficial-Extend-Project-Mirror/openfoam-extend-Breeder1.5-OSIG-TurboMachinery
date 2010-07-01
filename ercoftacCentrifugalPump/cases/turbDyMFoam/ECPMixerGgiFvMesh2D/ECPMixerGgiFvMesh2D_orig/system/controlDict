@@ -34,7 +34,7 @@ writeInterval   50;
 
 cycleWrite      0;
 
-purgeWrite      5;
+purgeWrite      20;
 
 writeFormat     ascii;
 
