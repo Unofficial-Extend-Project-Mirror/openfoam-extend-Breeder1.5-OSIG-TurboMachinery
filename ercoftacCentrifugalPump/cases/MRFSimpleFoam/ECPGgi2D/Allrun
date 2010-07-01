@@ -49,9 +49,9 @@ mv log.fluentMeshToFoam log.fluentMeshToFoam.stator2D
 
 pushd ${case} 									## starting the script makeMesh that is located in ## 
 export PATH=.:$PATH
-runApplication makeMesh									## ${case}/makeMesh ##
+runApplication makeMesh								## ${case}/makeMesh ##
 
-###-----------launching the comuptations------###
+###-----------launching the computations------###
 
 runApplication MRFSimpleFoam
 popd
