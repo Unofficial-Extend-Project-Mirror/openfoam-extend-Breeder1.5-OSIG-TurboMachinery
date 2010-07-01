@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. $WM_PROJECT_DIR/bin/tools/RunFunctions                                                                  ### load macros
+
 if [ -d ECPGgi2D_orig ] ; then
      case=ECPGgi2D;                                                                   			  ### this part sets
 elif [ -d ECPStitchMesh2D_orig ]; then                                                                    ### variable $case to
@@ -30,8 +32,11 @@ rm -rf ${case}/0/.svn
 
 ###------------making the mesh---------------###
 
-fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
-fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+runApplication fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
+mv log.fluentMeshToFoam log.fluentMeshToFoam.rotor2D
+
+runApplication fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+mv log.fluentMeshToFoam log.fluentMeshToFoam.stator2D
 
 
 							                        ## (optional) rotating the rotor so that its position corresponds to the ones that give ##
@@ -43,10 +48,11 @@ fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
 ###------------Building the case-----------###
 
 pushd ${case} 									## starting the script makeMesh that is located in ## 
-./makeMesh									## ${case}/makeMesh ##
+export PATH=.:$PATH
+runApplication makeMesh									## ${case}/makeMesh ##
 
 ###-----------launching the comuptations------###
 
-MRFSimpleFoam >> log_MRF_0 
+runApplication MRFSimpleFoam
 popd
 

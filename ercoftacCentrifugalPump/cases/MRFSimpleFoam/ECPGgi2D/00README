@@ -1,6 +1,6 @@
 ####---- HowTo simulate the case ----####
 
-To build the case and start the simulation, write ./Allrun. The simulation results will be written in a log file in ${case}/log_MRF_0
+To build the case and start the simulation, type ./Allrun. The simulation results will be written in the log file ${case}/log.MRFSimpleFoam
 
 ####---- HowTo postProcess the case ----####
 

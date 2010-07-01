@@ -1,5 +1,6 @@
 #!/bin/bash
 
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
 
 if [ -d ../ECPGgi2D_orig ] ; then
      case=ECPGgi2D;                                                                                       ### this part sets
@@ -11,15 +12,28 @@ fi
 
 ###--------postprocessing----###
 
-foamCalc mag U -case ../${case} -latestTime
-foamCalc components U -case ../${case} -latestTime
-foamLog ../${case}/log_MRF_0
+runApplication foamCalc mag U -case ../${case} -latestTime
+mv log.foamCalc log.foamCalc.magU
+runApplication foamCalc components U -case ../${case} -latestTime
+mv log.foamCalc log.foamCalc.componentsU
+runApplication foamLog ../${case}/log.MRFSimpleFoam
 
 ###--------sampling---------###
 
-sample -case ../${case} -latestTime
-cp ../${case}/sets/5000/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+runApplication sample -case ../${case} -latestTime
+
+# Find latest time directory
+latestAvailTimeDir=`foamInfoExec -case ../${case} -times | tail -1`
+
+cp ../${case}/sets/${latestAvailTimeDir}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
 paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data
 
-gnuplot compareAll.gplt
-mozilla file://$PWD/compareAll.html
+runApplication gnuplot compareAll.gplt
+
+# Checking if mozilla is available
+if command -v mozilla &>/dev/null ; then
+    mozilla file://$PWD/compareAll.html
+else
+    echo "mozilla: command not found"
+fi
+
