@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. $WM_PROJECT_DIR/bin/tools/RunFunctions                                        
+
 if [ -d ECPMixerGgiFvMesh2D_orig ] ; then
      case=ECPMixerGgiFvMesh2D;
 else
@@ -28,13 +30,16 @@ rm -rf ${case}/0/.svn
 
 ###------------making the mesh---------------###
 
-fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
-fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+runApplication fluentMeshToFoam -case rotor2D ../../meshes/rotor2D.msh
+mv log.fluentMeshToFoam log.fluentMeshToFoam.rotor2D
+
+runApplication fluentMeshToFoam -case stator2D ../../meshes/stator2D.msh
+mv log.fluentMeshToFoam log.fluentMeshToFoam.stator2D
 
 ###------------Create cellSet and cellZone-----------###
 
-cellSet -case rotor2D
-setsToZones -noFlipMap -case rotor2D
+runApplication cellSet -case rotor2D
+runApplication setsToZones -noFlipMap -case rotor2D
 
 ###------------Building the case-----------###
 ### Creation of the case. Note that in the case should be already a 0_orig/ system/ and constant/ folder ###
@@ -42,7 +47,7 @@ setsToZones -noFlipMap -case rotor2D
 cd ${case}
 cp -r 0_orig 0
 cp -r ../rotor2D/constant/polyMesh constant/
-mergeMeshes . . .. stator2D
+runApplication mergeMeshes . . .. stator2D
 rm -r constant/polyMesh
 mv 1e-07/polyMesh constant
 rm -r 1e-07/
@@ -54,10 +59,10 @@ cp constant/boundary.mergeMeshes constant/polyMesh/boundary
 
 ### Set up GGI zones for parallelization ###
 
-setSet -batch setBatch
-setsToZones -noFlipMap
+runApplication setSet -batch setBatch
+runApplication setsToZones -noFlipMap
 
 ###-----------launching the computations------###
 
-turbDyMFoam > log 
+runApplication turbDyMFoam
 

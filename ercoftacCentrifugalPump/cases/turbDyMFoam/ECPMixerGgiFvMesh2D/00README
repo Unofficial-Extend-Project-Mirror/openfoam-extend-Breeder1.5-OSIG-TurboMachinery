@@ -1,6 +1,6 @@
 ####---- HowTo simulate the case ----####
 
-To build the case and start the simulation, type ./Allrun. The simulation results will be written in a log file in ${case}/log
+To build the case and start the simulation, type ./Allrun. The simulation results will be written in the log file ${case}/log.turbDyMFoam
 
 ####---- HowTo postProcess the case ----####
 

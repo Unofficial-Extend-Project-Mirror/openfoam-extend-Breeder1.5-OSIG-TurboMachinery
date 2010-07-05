@@ -1,9 +1,10 @@
 #!/bin/bash
 
-rm -r ../sets/
-rm *.png
+rm -rf ../sets/
+rm -f *.png
 
-rm postProcessing_data_unsteady_0.*
-rm postProcessing_data_unsteady_Cp_auto_all_0.*
+rm -f postProcessing_data_unsteady_0.*
+rm -f postProcessing_data_unsteady_Cp_auto_all_0.*
 
-rm test_magU_p_k_epsilon_Ux_Uy_Uz.xy
+rm -f test_magU_p_k_epsilon_Ux_Uy_Uz.xy
+rm -f log.*

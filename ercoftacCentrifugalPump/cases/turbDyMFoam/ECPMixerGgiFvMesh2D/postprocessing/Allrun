@@ -1,140 +1,115 @@
 #!/bin/bash
 
-time=0.295711;
+. $WM_PROJECT_DIR/bin/tools/RunFunctions                                        
+
+echo "Starting postprocessing."
+
+# Test immediatly if the available version of gnuplot is new enough
+echo "set lmargin at screen 0" | gnuplot >/dev/null 2>&1
+if [ $? -ne 0 ]; then
+  echo "Error: Your version of gnuplot is too old."
+  echo "Please install a version of gnuplot which supports the following syntax for setting margins: 'set lmargin at screen 0'"
+  echo "Gnuplot version 4.2.4 or newer should do the job."
+  echo ""
+  exit -1
+fi
 
 
-###--------postprocessing----###
-
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-###--------sampling---------###
+###--------Prepare sampling---------###
 
 cp ../ECPMixerGgiFvMesh2D/system/sampleDict_linePlot ../ECPMixerGgiFvMesh2D/system/sampleDict
 
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
+dataIsAvailForGnuplot=false
 
-paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+###--------Sample through these time directories---------###
+timesDirectories=(
+    0.295711
+    0.296513
+    0.298118
+    0.298921
+    0.299322
+    )
 
+for time in ${timesDirectories[@]}
+do
+    ###-------- Check is we have reached this time step --------###
+    if [ -d ../ECPMixerGgiFvMesh2D/${time} ]; then
 
-time=0.296513;
+        ###--------postprocessing--------###
+	echo "Sampling at t=$time"
 
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
+        runApplication foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
+	mv log.foamCalc log.foamCalc_magU_${time}
 
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
-paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+        runApplication foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
+	mv log.foamCalc log.foamCalc_componentsU_${time}
 
+        ###--------sampling---------###
 
-time=0.298118;
+        runApplication sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+	mv log.sample log.sample_${time}
 
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
+        cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
 
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
-paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+        paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
 
+	dataIsAvailForGnuplot=true
 
-time=0.298921;
-
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
-paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
-
-
-time=0.299322;
-
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-cp ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy .
-paste test_magU_p_k_epsilon_Ux_Uy_Uz.xy teta > postProcessing_data_unsteady_${time}
+    else
+        echo "Warning: Missing time directory: ${time}. Skipping sampling."
+    fi
+done
 
 ###----------------gnuplot---------------###
-gnuplot call_backward_linearUpwind.gplt
-
+if $dataIsAvailForGnuplot ; then
+    runApplication gnuplot call_backward_linearUpwind.gplt
+    mv log.gnuplot log.gnuplot_call_backward_linearUpwind
+else
+    echo "Warning: No data for 'gnuplot call_backward_linearUpwind.gplt'"
+fi
 
 time=0.299723;
 
-###--------postprocessing----###
+if [ -d ../ECPMixerGgiFvMesh2D/${time} ]; then
+    ###--------postprocessing----###
 
-foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
-foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
+    runApplication foamCalc mag U -case ../ECPMixerGgiFvMesh2D -time ${time}
+    mv log.foamCalc log.foamCalc_magU_${time}
 
-###--------sampling---------###
+    runApplication foamCalc components U -case ../ECPMixerGgiFvMesh2D -time ${time}
+    mv log.foamCalc log.foamCalc_componentsU_${time}
 
-###--------part1----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part1 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+    ###--------sampling parts 1 to 10 ---------###
+    rm -f postProcessing_data_unsteady_Cp_auto_all_${time}
+    
+    for partNumber in 1 2 3 4 5 6 7 8 9 10
+    do
+        echo "Sampling at time ${time}, part $partNumber"
+        ###--------part1----------###
+        cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part${partNumber} ../ECPMixerGgiFvMesh2D/system/sampleDict
+        runApplication sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+	mv log.sample log.sample_${time}_part${partNumber}
 
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline > postProcessing_data_unsteady_Cp_auto_all_${time}
+        cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+    done
 
-###--------part2-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part2 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+    rm ../ECPMixerGgiFvMesh2D/system/sampleDict
 
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+    ###----------gnuplot--------###
+    runApplication gnuplot Cp_map_color.gplt
+    mv log.gnuplot log.gnuplot_Cp_map_color
 
-###--------part3-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part3 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+    runApplication gnuplot Cp_map_grey.gplt
+    mv log.gnuplot log.gnuplot_Cp_map_grey
 
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
+else
+    echo "Warning: Missing time directory: ${time}. Skipping sampling."
+fi
 
-###--------part4-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part4 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
+# Checking if mozilla is available
+if command -v mozilla &>/dev/null ; then
+    mozilla file://$PWD/compareAll.html
+else
+    echo "mozilla: command not found"
+fi
 
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part5-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part5 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part6-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part6 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part7-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part7 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part8-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part8 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part9-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part9 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy postProcessing_data_unsteady_Cp_blankline >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-###--------part10-----------###
-cp ../ECPMixerGgiFvMesh2D/system/sampleDict_part10 ../ECPMixerGgiFvMesh2D/system/sampleDict
-sample -case ../ECPMixerGgiFvMesh2D -time ${time}
-
-cat ../ECPMixerGgiFvMesh2D/sets/${time}/test_magU_p_k_epsilon_Ux_Uy_Uz.xy >> postProcessing_data_unsteady_Cp_auto_all_${time}
-
-rm ../ECPMixerGgiFvMesh2D/system/sampleDict
-
-###----------gnuplot--------###
-#gnuplot Cp_map_color.gplt
-gnuplot Cp_map_grey.gplt
-
-
-firefox file://$PWD/compareAll.html

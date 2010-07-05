@@ -9,3 +9,4 @@ fi
 rm -rf ${case}
 rm -rf rotor2D
 rm -rf stator2D
+rm -rf log.*
