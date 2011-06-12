@@ -1,0 +1,10 @@
+This directory contains a full case set-up named 'TSG', the geometry of the Timisoara Swirl generator in ICEM form, as well as the measurement data.
+
+Find library turboPerformance in:
+Breeder_1.5/OSIG/TurboMachinery/src/turboPerformance/
+
+Find library trackDictionary in
+Breeder_1.5/libraries/simpleFunctionObjects/
+
+Find solver transientSimpleDyMFoam in:
+Breeder_1.5/OSIG/TurboMachinery/applications/solvers/incompressible

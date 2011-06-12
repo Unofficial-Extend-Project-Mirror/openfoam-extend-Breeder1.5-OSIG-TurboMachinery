@@ -1,0 +1,201 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.3                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          controlDict;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+applicationClass transientSimpleDyMFoam;
+
+//startFrom       startTime;
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         30;
+
+deltaT          0.000001;
+
+writeControl    timeStep;
+
+writeInterval   500;
+
+cycleWrite      0;
+
+writeFormat     ascii;
+
+writePrecision  6;
+
+writeCompression compressed;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep yes;
+
+maxCo          15;
+
+maxDeltaT      1.0;
+
+functions
+(
+    ggiCheck
+    {
+        // Type of functionObject
+        type ggiCheck;
+
+        phi phi;
+
+        // Where to load it from (if not already in solver)
+//        functionObjectLibs ("libsampling.so");
+    }
+
+   trackDictionaryContent
+   {
+       type trackDictionary;
+       // Where to load it from (if not already in solver)
+       functionObjectLibs ("libsimpleFunctionObjects.so");
+       // Names of dictionaries to track.
+       dictionaryNameList
+       (
+           "system/controlDict"
+           "system/fvSchemes"
+           "system/fvSolution"
+           "constant/transportProperties"
+           "constant/RASProperties"
+       );
+       // Section separators (optional)
+       // If the string "_sectionIdToken_" explicitely appears in the
+       // specification of the following section separators, this token
+       // string will be replaced by the name of the dictionary beeing
+       // dumped to the console, plus the file modification date and time.
+       sectionStartSeparator "############ Start of: _sectionIdToken_############";
+       sectionEndSeparator   "############ End of: _sectionIdToken_############";
+   }
+
+
+    turboPerformance
+    {
+        type turboPerformance;
+        functionObjectLibs ("libperformance.so");
+        inletPatches (RUNNER_INLET);           // inlet patches, can be multiple
+        outletPatches (RUNNER_OUTLET);       // outlet patches, can be multiple
+        patches (RUNNER_BLADE RUNNER_WALLIN);     // rotor/impeller patches, again can be multiple
+        log true;                             // write data to screen (true/false)
+        rhoInf 998.0;                    // density
+        CofR (0 0 0);                      // center of rotation
+        omega (0 0 96.34217471);        // Rotational velocity (rad/s)
+        // pName  p;     //Optional: if p field is not called "p", give a new name here
+        // Uname U;     //Optional: if U field is not called "U", give a new name here
+        // phiName phi;  //Optional: if phi (flux) field is not called "phi", give a new name here
+    }
+    fluidPower
+    {
+        type fluidPower;
+        functionObjectLibs ("libperformance.so");
+        inletPatches (RUNNER_INLET);            // note: these patch names have small caps only !
+        outletPatches (RUNNER_OUTLET);
+        log true;
+        rhoInf 998.0;
+    }
+    forces
+    {
+        type forces;
+        functionObjectLibs ("libperformance.so");
+        patches (RUNNER_BLADE RUNNER_WALLIN);     // rotor/impeller patches, again can be multiple
+        log true;
+        rhoInf 998.0;
+        CofR (0 0 0);                      // center of rotation
+    }
+
+    probes1
+    {
+        // Type of functionObject
+        type probes;
+
+        // Where to load it from (if not already in solver)
+        functionObjectLibs ("libsampling.so");
+
+        // Locations to be probed. runTime modifiable!
+        probeLocations
+        (
+            (0.0495587 -0.000778461 0.120811097) //MG0 nearestCellCenter
+            (0.0563202 -0.000893461 0.1719948)  //MG1 nearestCellCenter
+            (0.0636401 0.00100103 0.22161)      //MG2 nearestCellCenter
+            (0.070964 -0.00111524 0.271226)     //MG3 nearestCellCenter
+            (-0.000893685 0.0563202 0.1719946)  //MC1 nearestCellCenter
+            (-0.0563202 0.000893461 0.1719948)  //MC2 nearestCellCenter
+            (0.000893685 -0.0563202 0.1719946)  //MC3 nearestCellCenter
+        );
+
+        // Fields to be probed. runTime modifiable!
+        fields
+        (
+            p
+            //pMean
+        );
+    }
+
+    fieldAverage1
+    {
+        // Type of functionObject
+        type fieldAverage;
+
+        // Where to load it from (if not already in solver)
+        functionObjectLibs ("libfieldAverage.so");
+
+        // Fields to be  averaged - runTime modifiable
+        fields
+        (
+            U
+            {
+                //mean            on;
+                mean            off;
+                prime2Mean      off;
+                base            time;
+            }
+            p
+            {
+                //mean            on;
+                mean            off;
+                prime2Mean      off;
+                base            time;
+            }
+            k
+            {
+                //mean            on;
+                mean            off;
+                prime2Mean      off;
+                base            time;
+            }
+            epsilon
+            {
+                //mean            on;
+                mean            off;
+                prime2Mean      off;
+                base            time;
+            }
+        );
+    }
+
+);
+
+libs ("libturboPerformance.so");
+
+// ************************************************************************* //

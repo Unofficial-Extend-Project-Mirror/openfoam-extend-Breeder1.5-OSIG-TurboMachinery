@@ -1,0 +1,148 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5-dev                               |
+|   \\  /    A nd           | Revision: 1497                                  |
+|    \\/     M anipulation  | Web:      http://www.OpenFOAM.org               |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       polyBoundaryMesh;
+    location    "1/polyMesh";
+    object      boundary;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+18
+(
+    STROUT_WALL
+    {
+        type            wall;
+        nFaces          11200;
+        startFace       7954811;
+    }
+    STROUT_NOZZLE
+    {
+        type            wall;
+        nFaces          9781;
+        startFace       7966011;
+    }
+    STROUT_BLADE
+    {
+        type            wall;
+        nFaces          6720;
+        startFace       7975792;
+    }
+    STROUT_INLET
+    {
+        type            patch;
+        nFaces          4257;
+        startFace       7982512;
+    }
+    STROUT_OUTLET
+    {
+        type            ggi;	
+	shadowPatch	SV_INLET;
+	zone		STROUT_OUTLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          3456;
+        startFace       7986769;
+    }
+    SV_INLET
+    {
+        type            ggi;	
+	shadowPatch	STROUT_OUTLET;
+	zone		SV_INLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          16562;
+        startFace       7990225;
+    }
+    SV_OUTLET
+    {
+        type            ggi;	
+	shadowPatch	RUNNER_INLET;
+	zone		SV_OUTLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          16562;
+        startFace       8006787;
+    }
+    SV_WALL
+    {
+        type            wall;
+        nFaces          37960;
+        startFace       8023349;
+    }
+    STAY_VANES
+    {
+        type            wall;
+        nFaces          54782;
+        startFace       8061309;
+    }
+    RUNNER_BLADE
+    {
+        type            wall;
+        nFaces          45570;
+        startFace       8116091;
+    }
+    RUNNER_WALLOUT
+    {
+        type            wall;
+        nFaces          14450;
+        startFace       8161661;
+    }
+    RUNNER_INLET
+    {
+        type            ggi;	
+	shadowPatch	SV_OUTLET;
+	zone		RUNNER_INLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          13230;
+        startFace       8176111;
+    }
+    RUNNER_OUTLET
+    {
+        type            ggi;	
+	shadowPatch	SUGROR_INLET;
+	zone		RUNNER_OUTLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          13720;
+        startFace       8189341;
+    }
+    RUNNER_WALLIN
+    {
+        type            wall;
+        nFaces          14450;
+        startFace       8203061;
+    }
+    SUGROR_NOZZLE
+    {
+        type            wall;
+        nFaces          11505;
+        startFace       8217511;
+    }
+    SUGROR_INLET
+    {
+        type            ggi;	
+	shadowPatch	RUNNER_OUTLET;
+	zone		SUGROR_INLET_ZONE;
+	bridgeOverlap	false;
+        nFaces          3776;
+        startFace       8229016;
+    }
+    SUGROR_WALL
+    {
+        type            wall;
+        nFaces          25488;
+        startFace       8232792;
+    }
+    SUGROR_OUTLET
+    {
+        type            patch;
+        nFaces          8437;
+        startFace       8258280;
+    }
+)
+
+// ************************************************************************* //

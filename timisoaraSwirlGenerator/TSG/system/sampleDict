@@ -1,0 +1,62 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5.x                                 |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      sampleDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+interpolationScheme cellPoint;
+//interpolationScheme cellPointFace;
+//interpolationScheme cell;
+
+//setFormat     xmgr;
+//setFormat     gnuplot;
+setFormat     raw;
+//setFormat     jplot;
+
+sets      
+(
+    W_0 //Resulting file name
+    {
+        type            uniform;
+        axis            distance;         //x-axis in plot
+        start           (0 -0.06023 0.08658 );
+        end             (0 -0.03169 0.07327);
+        nPoints         100;
+    }
+    W_1 //Resulting file name
+    {
+        type            uniform;
+        axis            distance;         //x-axis in plot
+        start           (0 -0.05326 0.15473);
+        end             (0 0.05674 0.17118);
+        nPoints         100;
+    }
+    W_2 //Resulting file name
+    {
+        type            uniform;
+        axis            distance;         //x-axis in plot
+        start           (0 0.06597 0.23959);
+        end             (0 -0.06595 0.25938);
+        nPoints         100;
+    }
+);
+
+surfaces
+();
+
+fields          
+(
+    UMean
+);
+
+// ************************************************************************* //

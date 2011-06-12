@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Source tutorial clean functions
+. $WM_PROJECT_DIR/bin/tools/CleanFunctions
+
+cleanTimeDirectories
+rm -rf ./constant/polyMesh/sets
+rm -f ./constant/polyMesh/faceZones*
+
+# We should also remove the 0 directory
+rm -rf 0
+
+# we remove the directory created by sample turboPerformance funstionObject
+rm -rf forces
+rm -rf fluidPower
+rm -rf turboPerformance
+rm -rf VTK
+rm -rf probes1
+

@@ -1,0 +1,7 @@
+faceSet STROUT_OUTLET_ZONE new patchToFace STROUT_OUTLET
+faceSet SV_INLET_ZONE new patchToFace SV_INLET
+faceSet SV_OUTLET_ZONE new patchToFace SV_OUTLET
+faceSet RUNNER_INLET_ZONE new patchToFace RUNNER_INLET
+faceSet RUNNER_OUTLET_ZONE new patchToFace RUNNER_OUTLET
+faceSet SUGROR_INLET_ZONE new patchToFace SUGROR_INLET
+quit

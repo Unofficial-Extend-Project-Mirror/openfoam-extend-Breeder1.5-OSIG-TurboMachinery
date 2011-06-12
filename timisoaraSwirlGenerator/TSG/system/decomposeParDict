@@ -1,0 +1,42 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.5                                   |
+|   \\  /    A nd           | Web:      http://www.OpenFOAM.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      decomposeParDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+numberOfSubdomains 32;
+
+method          simple;
+
+globalFaceZones ( 
+		STROUT_OUTLET_ZONE 
+		SV_INLET_ZONE 
+		SV_OUTLET_ZONE 
+		RUNNER_INLET_ZONE 
+		RUNNER_OUTLET_ZONE 
+		SUGROR_INLET_ZONE 
+		);
+
+simpleCoeffs
+{
+    n               (4 4 2);
+    delta           0.001;
+}
+
+distributed     no;
+
+roots           
+(
+);
+
+// ************************************************************************* //

@@ -1,0 +1,23 @@
+#!/bin/sh
+
+. $WM_PROJECT_DIR/bin/tools/RunFunctions
+
+runApplication setSet -batch setBatch
+runApplication setsToZones -noFlipMap
+
+
+# To begin from stratch
+#cp -r 0.Orig 0
+#runApplication $application
+
+
+# To begin from pre-computed transient solution
+cp -r transientSimpleDyMFoam.1 0
+
+
+application="transientSimpleDyMFoam"
+runApplication $application
+
+~                                                                                                          
+~                                                                                                          
+~                                                          

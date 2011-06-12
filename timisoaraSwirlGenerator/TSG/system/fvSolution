@@ -1,0 +1,125 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  1.3                                   |
+|   \\  /    A nd           | Web:      http://www.openfoam.org               |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+
+FoamFile
+{
+    version         2.0;
+    format          ascii;
+    class           dictionary;
+    object          fvSolution;
+}
+
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+solvers
+{
+
+    p PCG
+    {
+        preconditioner   DIC;
+        tolerance        1e-05;
+        relTol           0.002;
+	minIter       2;
+	maxIter    140;
+    };
+    pFinal PCG
+    {
+        preconditioner   DIC;
+        tolerance        1e-05;
+        relTol           0.001;
+	minIter       2;
+	maxIter    280;
+    };
+    pcorr PCG
+    {
+        preconditioner   DIC;
+        tolerance        1e-05;
+        relTol           0.001;
+	minIter      2;
+	maxIter    180;
+    };
+
+
+    U PBiCG
+    {
+        preconditioner
+        { type         DILU;}
+
+        smoother
+	 { type         DILU; }
+	 
+        minIter          1;
+        maxIter          4;
+        tolerance        1e-07;
+        relTol           0;
+    };
+    
+    k PBiCG
+    {
+        preconditioner
+        { type         DILU; }
+
+        smoother
+	 { type         DILU; }
+	 
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+
+    epsilon PBiCG
+    {
+        preconditioner
+        {  type         DILU; }
+
+        smoother
+	 { type         DILU; }
+	 
+
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+
+    omega PBiCG
+    {
+        preconditioner
+        { type         DILU; }
+
+        smoother
+	 { type         DILU; }
+	 
+        minIter          1;
+        maxIter          3;
+        tolerance        1e-07;
+        relTol           0;
+    };
+}
+
+PISO
+{
+    nCorrectors      0;
+    nOuterCorrectors 10; 
+    nNonOrthogonalCorrectors 0;
+    correctPhi            false;
+}
+
+
+relaxationFactors
+{
+    p               0.3;
+    U               0.75;
+    k               0.5;
+    epsilon         0.5;
+    omega           0.5;
+}
+
+
+// ************************************************************************* //
