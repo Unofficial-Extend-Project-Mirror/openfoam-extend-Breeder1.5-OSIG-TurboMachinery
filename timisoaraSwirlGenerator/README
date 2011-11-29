@@ -1,4 +1,4 @@
-This directory contains a full case set-up named 'TSG', the geometry of the Timisoara Swirl generator in ICEM form, as well as the measurement data.
+This directory contains a full case set-up named 'TSG', the geometry of the Timisoara Swirl generator in ICEM form, the blocking used to create the mesh in ICEM, as well as the measurement data.
 
 Find library turboPerformance in:
 Breeder_1.5/OSIG/TurboMachinery/src/turboPerformance/
